@@ -1,126 +1,245 @@
-# AD转录组模型调整分析
+# Model Adjustment in Alzheimer Disease Transcriptomes
 
-Linux分析代码，版本 **1.2.2**。
+English installation and execution guide for version **1.2.2**. This pipeline runs on **Linux**.
 
-本仓库比较组织质量调整和笼位建模对转录组效应估计、标准误与显著关联集合的影响。人类分析使用SEA-AD单核计数，小鼠分析使用GSE233208空间表达；GSE118553用于建立候选基因面板，MGI用于一对一同源映射。
+[中文说明](README.md)
 
-完整入口为 `run.py`。代码包含公开数据下载、计数聚合、统计模型、配对系数检验、SE分解、dream收敛复核、条件模拟和结果绘图，不是只读取整理结果的绘图包。函数和类的说明为中文。
+## Overview
 
-## 目录
+This repository evaluates how tissue-quality adjustment and cage modelling change expression coefficients, standard errors, and significant association sets. The main entry point is `run.py`.
+
+The workflow includes public-data downloads, count aggregation, expression modelling, paired coefficient-difference tests, standard-error decomposition, dream convergence checks, simulations, calibration, and figures with CSV source data.
+
+| Resource | Role |
+|---|---|
+| SEA-AD | Donor-level expression and tissue-quality adjustment in dorsolateral frontal cortex |
+| GSE233208 | Animal-level spatial expression and alternative cage models |
+| GSE118553 | Definition of the frontal candidate-gene panel |
+| MGI | Human-to-mouse one-to-one ortholog mapping |
+
+Analysis starts from publicly deposited count/UMI layers and processed microarray matrices. FASTQ alignment and raw microarray intensity processing are outside this workflow. Source URLs, eligibility rules, and processing details are documented in [Data sources](docs/DATA_SOURCES_EN.md) and implemented in `pipeline/` and `analysis/`. All eight detailed guides are available in English and Chinese; source-code comments remain in Chinese.
+
+## Repository Layout
 
 ```text
 paper1-from-public/
-  run.py                    完整分析入口
-  run_dream_repair.py        已有运行中dream警告的定点复核
-  config.json               样本条件、统计设置和随机种子
-  environment.yml           Linux Conda环境
-  requirements.txt          Python依赖
-  analysis/                 R数据处理、模型和模拟
-  pipeline/                 Python下载、聚合、校准、核查和绘图
-  tests/                    Python与R回归测试
-  docs/                     数据、方法、运行、输出和发布说明
-  CITATION.cff              软件引用信息
-  release_manifest.json     本包文件摘要
+  run.py                   Main workflow
+  run_dream_repair.py       Targeted review of dream warnings from an existing run
+  config.json              Data release, eligibility rules, simulation settings, seeds
+  environment.yml          Linux Conda environment
+  requirements.txt         Python dependencies
+  analysis/                R preparation, models, diagnostics, and simulations
+  pipeline/                Python downloads, aggregation, calibration, and reporting
+  tests/                   Regression and input-validation tests
+  docs/                    Data, methods, output, and publication documentation
+  CITATION.cff             Software citation metadata
+  release_manifest.json    Checksums for the packaged release files
 ```
 
-仓库不包含原始数据、聚合矩阵、运行结果、安装后的R包、日志或临时文件。
+Raw data, prepared count matrices, installed R packages, and generated results are stored locally rather than in the repository.
 
-## 第一次运行
+## Choose a Run Mode
 
-在Linux中解压后进入含 `run.py` 的目录：
+| Situation | Command option |
+|---|---|
+| First run, with data downloads allowed | `--task all` |
+| Reuse an existing data directory; download only missing inputs if necessary | `--task all --data-work /path/to/existing/work` |
+| Reanalyse complete prepared inputs without downloading data | `--task reanalyse --data-work /path/to/existing/work` |
+| Install and verify R dependencies | `--task install-r` |
+
+Run commands from the repository root, the directory containing `run.py`. Replace example paths with real Linux paths before execution.
+
+## 1. First Run
+
+### Create the environment
+
+The supplied environment uses Python 3.12 and R 4.5.x. The R installer targets Bioconductor 3.22. Compilers and system libraries needed for R package installation are included in `environment.yml`.
 
 ```bash
+cd /path/to/paper1-from-public
 conda env create -f environment.yml
 conda activate paper1-public
+```
+
+If the environment already exists, activate it instead of creating it again. An existing environment must provide the dependencies in `requirements.txt`, a compatible R installation, and the required build tools.
+
+### Install R dependencies, then run the analysis
+
+```bash
 set -euo pipefail
 
 python -u run.py \
   --task install-r \
   --work "$PWD/work_public" \
   --rscript "$CONDA_PREFIX/bin/Rscript" \
-  --library "$PWD/R_library"
+  --library "$PWD/R_library" \
+  2>&1 | tee install_r.log
 
 python -u run.py \
   --task all \
   --work "$PWD/work_public" \
   --rscript "$CONDA_PREFIX/bin/Rscript" \
   --library "$PWD/R_library" \
-  --workers 1 --resume \
+  --workers 1 \
+  --resume \
   2>&1 | tee run.log
 ```
 
-依赖安装失败时，`set -euo pipefail` 会停止后续分析。已有Python环境可以按 `requirements.txt` 检查依赖，无需重复创建环境。R需为4.5.x，Bioconductor系列为3.22；运行时记录实际包版本。
+The shell stops if dependency installation or verification fails. The analysis itself does not automatically install packages. First-time installation and data acquisition require network access.
 
-首次下载需要较大的磁盘和内存。这里的起点是作者公开的UMI/counts层与芯片处理矩阵，不包含FASTQ比对或芯片原始强度处理。
+The full workflow checks dependencies and numerical regression tests before analysis. Downloaded files and prepared inputs remain in the work directory for subsequent use. Large source objects and intermediate count matrices require substantially more storage than the final review bundle; allow sufficient disk space and memory before starting.
 
-## 已有数据，不重新下载
+## 2. Reuse Existing Data Without Downloading
 
-使用原分析的完整工作目录，不是删去大文件后的 `review_bundle`。先把 `DATA_WORK` 和 `R_LIB` 改为本机真实路径：
+Use the **complete work directory** from a compatible earlier run. A `review_bundle` is not a valid substitute: it deliberately excludes large count objects needed for analysis.
+
+Set `DATA_WORK` to the existing data directory and `R_LIB` to the verified R library. Choose a new output directory for the new analysis.
 
 ```bash
+cd /path/to/paper1-from-public
 conda activate paper1
 set -euo pipefail
 
 DATA_WORK="/absolute/path/to/existing/work"
 R_LIB="/absolute/path/to/existing/R_library"
+NEW_WORK="$PWD/work_reanalysis_v1_2_2"
 
 python -u run.py \
-  --task all \
+  --task reanalyse \
   --data-work "$DATA_WORK" \
-  --work "$PWD/work_public_new" \
+  --work "$NEW_WORK" \
   --rscript "$CONDA_PREFIX/bin/Rscript" \
   --library "$R_LIB" \
-  --workers 1 --resume \
-  2>&1 | tee run.log
+  --workers 1 \
+  --resume \
+  2>&1 | tee reanalysis.log
 ```
 
-数据复用顺序：
+Here `paper1` is an example existing environment name; use the environment that contains your verified dependencies. This mode requires all four preparation stages and their recorded inputs to be complete. It checks input identities before refitting models, simulations, and calibration.
 
-1. 已有聚合计数及其元数据通过SHA-256和来源记录核验，直接进入模型。
-2. 聚合输入不齐但原始缓存完整，读取缓存重新聚合。
-3. 只下载缺失的原始文件。
+The source and destination work directories must be different and must not contain one another. Keep the original provenance records, checksums, and stage files with the existing data.
 
-不覆盖已有数据。文件存在但缺少完整性记录，或摘要不一致时会停止核查，不会静默采用。严格禁止联网下载的重新分析可将 `--task all` 改为 `--task reanalyse`，此时四个准备阶段必须完整。
+### Reuse data but allow missing files to be downloaded
 
-新结果目录与已有数据目录不能相同，也不能互相嵌套。中断后使用相同代码、参数及工作目录重跑并保留 `--resume`。不要删除来源收据或阶段记录。
+In the command above, replace `--task reanalyse` with `--task all` and retain `--data-work`.
 
-## 检查与结果
+The workflow then:
 
-不读取真实数据的Python测试：
+1. Reuses prepared counts and metadata when their identities and provenance pass verification.
+2. Rebuilds prepared inputs from verified raw caches when necessary.
+3. Downloads only missing source files.
+
+A file's presence alone is not sufficient for reuse. Missing integrity records or checksum mismatches require review; the pipeline does not silently accept an unverified cache.
+
+## 3. Resume an Interrupted Run
+
+Repeat the original command with the same code, configuration, paths, and `--resume` flag. Completed stages can be reused when their recorded signatures and outputs pass verification.
+
+If code or analysis settings have changed, use a new output directory and point `--data-work` to the previous complete work directory. Do not delete stage records to bypass a signature mismatch.
+
+Runtime depends on hardware, source-file access, R package compilation, and the number of model fits and simulation repeats. The full analysis is substantially longer than the preflight tests. Use the log and stage files to determine progress rather than expecting a fixed completion time.
+
+## 4. Tests and Command-Line Options
+
+Run the Python tests without loading the study datasets:
 
 ```bash
 python -m unittest discover -s tests -v
 ```
 
-完整运行先检查依赖，再执行R数值回归和dream官方API小样本测试。分析期间不自动安装软件。
+Display all supported arguments:
 
-| 输出 | 用途 |
+```bash
+python run.py --help
+```
+
+| Argument | Purpose |
 |---|---|
-| `prepared/` | 聚合计数、样本纳入清单和设计矩阵 |
-| `results/` | 效应、SE、p/q值、方差组分、校准和模拟CSV |
-| `figures/` | 八组分析图，含PDF、600 dpi PNG及同名CSV |
-| `status.json` | 请求的任务状态和结果核查摘要 |
-| `review_bundle.zip` | 便于审阅的小型结果包，排除大计数对象 |
+| `--task` | Select the workflow or an individual task; default: `all` |
+| `--work` | Output and working directory; default: `work_public` under the repository |
+| `--data-work` | Existing work directory to reuse with `all` or `reanalyse` |
+| `--reuse-work` | Alias for `--data-work` |
+| `--config` | Configuration JSON; default: repository `config.json` |
+| `--rscript` | Path to the Rscript executable |
+| `--library` | R package library; default: repository `R_library` |
+| `--workers` | Worker count; examples use one worker |
+| `--resume` | Reuse validated completed stages |
 
-退出码0表示所请求任务完成，2表示输入、依赖或计算检查失败，3表示流程结束但仍有拟合失败或未解决警告。纯基因型笼中固定效应不可估计单独记录，不与数值失败混合。警告经两优化器复核后通过的拟合可保留。
+Individual tasks also include `check`, `download`, `prepare`, `models`, `simulation`, `calibration`, `figures`, and `audit`. Downstream tasks require their upstream inputs. Use `all` or `reanalyse` for the complete analysis.
 
-## 与论文的对应
+The standard preflight includes R numerical checks and small official-API dream tests. Passing these tests confirms that the tested components are usable; final completion is reported separately in `status.json`.
 
-本发布包的32个分析、配置和测试文件与最后完成运行时保存的执行副本逐字节一致。此次只整理文档与GitHub打包，没有改动拟合、筛选、校正、种子或优化器规则。
+## 5. Find and Interpret the Results
 
-代码图号按分析模块命名，与投稿排版图号不同，见 [图表对应说明](docs/PAPER_MAPPING.md)。本仓库覆盖论文的核心公开数据分析；补充材料中的其他队列及其独立分析不在这一入口内。
+All paths below are relative to the selected work directory.
 
-`results/manuscript_comparison.csv` 是保留在原执行代码中的早期稿件数值对照，不能用它判断2026-10-09稿件是否匹配。尤其其中六个小鼠SE参照值已不适用于当前稿件。当前结果应按图表对应说明直接读取计算结果；这些参照常数不参与拟合或显著性判定。
+| Location | Contents |
+|---|---|
+| `prepared/` | Aggregated counts, metadata, inclusion records, and design inputs |
+| `results/` | Coefficients, SEs, p/q values, model diagnostics, and simulation results |
+| `results/calibration/` | Paired-test calibration summaries and design geometry |
+| `figures/` | Eight groups of analysis figures, with PDFs, 600-dpi PNGs, and source CSVs |
+| `logs/` | Stage-specific process output |
+| `stages/` | Stage records used for validation and resumption |
+| `status.json` | Requested task status and audit summary |
+| `review_bundle.zip` | Review package excluding large count objects |
 
-## 文档
+Important result files include:
 
-- [数据来源、下载地址和处理规则](docs/DATA_SOURCES.md)
-- [模型、检验家族与模拟定义](docs/METHODS.md)
-- [文件和函数说明](docs/CODE_GUIDE.md)
-- [结果表及列含义](docs/OUTPUTS.md)
-- [论文图表对应与复现范围](docs/PAPER_MAPPING.md)
-- [dream定点复核](docs/DREAM_REPAIR.md)
-- [版本验证](docs/VALIDATION.md)
-- [上传GitHub](docs/GITHUB_UPLOAD.md)
+- `human_results.csv.gz`: human gene-context-contrast estimates in both model arms.
+- `human_paired_changes.csv.gz`: paired coefficient differences and model-based/HC3 tests.
+- `mouse_results.csv.gz`: mouse candidate-panel results and explicitly named testing families.
+- `mouse_precision.csv.gz`: gene-level SE ratios and decomposition factors.
+- `mouse_variance.csv.gz`: cage variance, conditional ICC, and fitting diagnostics.
+- `mouse_model_status.csv`: availability and failures by specification and model.
+- `mouse_dream_diagnostics.csv`: warnings requiring localization or review.
+- `mouse_dream_retry_attempts.csv`: recorded optimizer retry results.
+- `simulation_summary.csv`: bias, empirical SD, estimated SE, coverage, rejection, interval width, and availability.
+- `calibration/calibration_summary.csv`: conditional calibration of the paired coefficient tests.
 
-数据分别遵循原提供方使用条款。软件许可由作者确定；未指定许可证前，公开代码不等于授予任意再分发或修改许可。本包没有虚构仓库地址、DOI或论文发表信息。
+Files ending in `.csv.gz` are gzip-compressed CSV tables. For example, pandas can read them directly with `pd.read_csv("results/human_results.csv.gz")`; manual decompression is unnecessary.
+
+### Exit codes
+
+| Code | Meaning |
+|---|---|
+| `0` | The requested task completed |
+| `2` | An input, dependency, execution, or validation check failed |
+| `3` | The workflow finished but retained fit failures or unresolved warnings |
+
+An `install-r` exit code of zero confirms dependency setup, not completion of the scientific analysis. Review the task named in `status.json` and the accompanying audit.
+
+In the current simulation output, `failure_rate` records numerical failures, while `unavailable_rate` also includes structural non-estimability. A cage-fixed genotype effect cannot be estimated in a pure-genotype cage layout; those cases are recorded separately from numerical errors. Older manuscript source tables used different field names, so compare definitions before comparing columns.
+
+## 6. Common Problems
+
+| Message or symptom | What to check |
+|---|---|
+| Missing R packages | Run `--task install-r` with the same `--rscript` and `--library` intended for analysis |
+| SSL or repository access error during installation | Resolve network/certificate access, then rerun dependency installation; do not interpret this as an analysis result |
+| Prepared inputs missing | Confirm that `--data-work` points to a full work directory, not `review_bundle` |
+| Checksum or provenance mismatch | Verify the source files and records; do not remove the validation records to force reuse |
+| Code or parameter signature changed | Start a new `--work` directory and reuse verified data through `--data-work` |
+| dream warning or exit code 3 | Inspect `mouse_dream_diagnostics.csv`, retry records, and `status.json`; see [Targeted dream review](docs/DREAM_REPAIR_EN.md) |
+| More than one figure numbering scheme | Use the manuscript mapping document; code figure numbers do not directly replace manuscript figure numbers |
+
+## 7. Relation to the Manuscript
+
+The repository covers the core public-data analyses. Supplementary analyses of other cohorts and historical simulation designs have separate workflows and are not all rerun by this entry point.
+
+Code figure numbers identify analysis modules, not the manuscript layout. Consult [Manuscript mapping](docs/PAPER_MAPPING_EN.md) before replacing or citing figures.
+
+`results/manuscript_comparison.csv` retains an earlier manuscript's numerical reference values. In particular, its six mouse SE references predate the updated manuscript. Those constants do not enter model fitting or significance decisions. A mismatch in this historical comparison therefore does not by itself establish a mismatch with the current manuscript; compare the calculated result tables against the relevant manuscript version and testing family.
+
+## Further Documentation
+
+- [Data sources and processing](docs/DATA_SOURCES_EN.md)
+- [Models, tests, and simulation definitions](docs/METHODS_EN.md)
+- [Files and functions](docs/CODE_GUIDE_EN.md)
+- [Output tables and fields](docs/OUTPUTS_EN.md)
+- [Manuscript mapping and coverage](docs/PAPER_MAPPING_EN.md)
+- [Targeted dream review](docs/DREAM_REPAIR_EN.md)
+- [Release validation](docs/VALIDATION_EN.md)
+- [GitHub upload guide](docs/GITHUB_UPLOAD_EN.md)
+
+Use `CITATION.cff` for the available software citation metadata. Source datasets retain their providers' terms of use. The software license must be selected by the authors; public availability alone does not specify a reuse license.
