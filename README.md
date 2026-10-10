@@ -2,7 +2,7 @@
 
 English installation and execution guide for version **1.2.2**. This pipeline runs on **Linux**.
 
-[中文说明](README.md)
+[中文说明](README_CN.md)
 
 ## Overview
 
