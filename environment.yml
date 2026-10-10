@@ -1,0 +1,28 @@
+name: paper1-public
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.12
+  - pip
+  - r-base=4.5
+  - c-compiler
+  - cxx-compiler
+  - fortran-compiler
+  - make
+  - pkg-config
+  - zlib
+  - libcurl
+  - openssl
+  - libxml2
+  - freetype
+  - fontconfig
+  - harfbuzz
+  - fribidi
+  - pip:
+      - numpy>=1.26,<3
+      - pandas>=2.2,<3
+      - scipy>=1.12,<2
+      - h5py>=3.10,<4
+      - openpyxl>=3.1,<4
+      - matplotlib>=3.8,<4

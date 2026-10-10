@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "Please cite this software version and the associated manuscript when using this analysis."
+title: "Model adjustment diagnostics for human and mouse Alzheimer disease transcriptomes"
+type: software
+version: 1.2.2
+date-released: 2026-10-09
+authors:
+  - family-names: Fan
+    given-names: Jin
+  - family-names: Liu
+    given-names: Chang
+  - family-names: Zhang
+    given-names: Xiankun
+  - family-names: Song
+    given-names: Chen
+keywords:
+  - transcriptomics
+  - Alzheimer disease
+  - model adjustment
+  - reproducibility

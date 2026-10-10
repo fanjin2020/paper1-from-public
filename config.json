@@ -1,0 +1,17 @@
+{
+  "seaad_release": "2026-06-22",
+  "seaad_expected_donors": 80,
+  "minimum_nuclei": 20,
+  "minimum_cortex_spots": 100,
+  "cortex_labels": ["ctx-deep-layers", "ctx-upper-layers"],
+  "panel_fdr": 0.05,
+  "calibration_repeats": 2500,
+  "simulation_repeats": 500,
+  "seed": 20261005,
+  "workers": 1,
+  "analysis_version": "1.2.2",
+  "ebayes_robust": false,
+  "dream_ebayes_robust": false,
+  "simulation_grid": "targeted",
+  "simulation_seed": 71004000
+}
