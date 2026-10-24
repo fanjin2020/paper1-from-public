@@ -1,0 +1,6 @@
+# Optional-environment specification; the launcher never installs this file.
+# Installed supplementary versions are recorded and frozen per experiment.
+-r requirements.txt
+scikit-learn>=1.4,<2
+threadpoolctl>=3,<4
+scrublet>=0.2.3,<0.3

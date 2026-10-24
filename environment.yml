@@ -10,6 +10,7 @@ dependencies:
   - cxx-compiler
   - fortran-compiler
   - make
+  - cmake
   - pkg-config
   - zlib
   - libcurl
@@ -20,9 +21,12 @@ dependencies:
   - harfbuzz
   - fribidi
   - pip:
-      - numpy>=1.26,<3
-      - pandas>=2.2,<3
-      - scipy>=1.12,<2
-      - h5py>=3.10,<4
-      - openpyxl>=3.1,<4
-      - matplotlib>=3.8,<4
+      - numpy==2.2.6
+      - pandas==2.2.3
+      - scipy==1.15.3
+      - h5py==3.13.0
+      - openpyxl==3.1.5
+      - matplotlib==3.10.1
+      - scikit-learn>=1.4,<2
+      - threadpoolctl>=3,<4
+      - scrublet>=0.2.3,<0.3
