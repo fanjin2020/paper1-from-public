@@ -15,7 +15,7 @@ if(mode=='human') {
   need(identical(colnames(y),md$unit_id),'人类表达与单位对应错误')
   panel<-rd(file.path(out,'panel.csv'))$gene_symbol
   contexts<-sort(unique(md$context)); contrasts<-c('clinical_status','clinical_status_adjusted_for_braak','braak_same_clinical_population')
-  result<-list();paired<-list();status<-list();family<-list();membership<-list();i<-0
+  result<-list();paired<-list();status<-list();family<-list();membership<-list();precision<-list();i<-0
   for(context in contexts) {
     selected<-md$context==context & md$n_cells>=cfg$minimum_nuclei & md$clinical_group%in%c('Dementia','No_dementia')
     selected<-selected & complete.cases(md[,c('age','sex','pathology','PMI','RIN','pH')])
@@ -40,15 +40,30 @@ if(mode=='human') {
       x0<-human_design(d,contrast);x1<-human_design(d,contrast,TRUE)
       ok<-!is.null(v)&&estimable(x0)&&estimable(x1)
       status[[i]]<-data.frame(spec=spec,n=nrow(d),p0=ncol(x0),p1=ncol(x1),status=if(ok)'available' else 'not_estimable')
+      fitted<-list()
       for(arm in c('base','quality')) {
         if(ok) {
           f<-fit_voom(v,if(arm=='base')x0 else x1)
+          fitted[[arm]]<-f
           z<-fit_rows(f,panel,'target',spec,arm)
         } else z<-data.frame(gene_symbol=panel,spec=spec,model=arm,beta=NA_real_,SE=NA_real_,df=NA_real_,p=NA_real_,low=NA_real_,high=NA_real_,status='not_estimable')
         z$context<-context;z$contrast<-contrast;z$n<-nrow(d)
         result[[length(result)+1]]<-z
       }
       if(ok) {
+        base<-fitted$base; quality<-fitted$quality
+        common_fit<-Reduce(intersect,list(panel,rownames(base$coefficients),rownames(quality$coefficients)))
+        if(length(common_fit)) {
+          ib<-match(common_fit,rownames(base$coefficients)); iq<-match(common_fit,rownames(quality$coefficients))
+          design_ratio<-quality$stdev.unscaled[iq,'target']/base$stdev.unscaled[ib,'target']
+          posterior_ratio<-sqrt(quality$s2.post[iq]/base$s2.post[ib])
+          se_base<-base$stdev.unscaled[ib,'target']*sqrt(base$s2.post[ib])
+          se_quality<-quality$stdev.unscaled[iq,'target']*sqrt(quality$s2.post[iq])
+          need(max(abs(se_quality/se_base-design_ratio*posterior_ratio))<1e-8,'Human SE identity failed')
+          precision[[length(precision)+1]]<-data.frame(gene_symbol=common_fit,spec=spec,
+            SE_base=se_base,SE_quality=se_quality,SE_ratio=se_quality/se_base,
+            design_factor=design_ratio,posterior_factor=posterior_ratio)
+        }
         common<-intersect(panel,rownames(v$E))
         changes<-lapply(common,function(gene) {
           k<-match(gene,rownames(v$E));z<-paired_wls(v$E[k,],v$weights[k,],x0,x1)
@@ -67,6 +82,9 @@ if(mode=='human') {
   wr(all,file.path(out,'human_results.csv.gz'))
   wr(do.call(rbind,status),file.path(out,'human_designs.csv'))
   wr(do.call(rbind,membership),file.path(out,'human_gene_membership.csv'))
+  wr(if(length(precision))do.call(rbind,precision) else data.frame(gene_symbol=character(),spec=character(),
+    SE_base=numeric(),SE_quality=numeric(),SE_ratio=numeric(),design_factor=numeric(),posterior_factor=numeric()),
+    file.path(out,'human_precision.csv.gz'))
   grid<-expand.grid(gene_symbol=panel,spec=unique(all$spec),stringsAsFactors=FALSE)
   changes<-if(length(paired))do.call(rbind,paired) else data.frame(gene_symbol=character(),spec=character(),p=numeric(),p_HC3=numeric())
   changes<-merge(grid,changes,by=c('gene_symbol','spec'),all.x=TRUE,sort=FALSE)
@@ -122,7 +140,7 @@ if(mode=='mouse') {
   wr(data.frame(gene_symbol=background),file.path(out,'mouse_background.csv'))
   panel<-rd(file.path(out,'ortholog_panel.csv'));panel$mouse_gene[is.na(panel$mouse_gene)]<-paste0('__UNMAPPED__',panel$gene_symbol[is.na(panel$mouse_gene)])
   results<-list();decomposition<-list();variance<-list();diagnostics<-list()
-  audits<-list();background_rows<-list();messages<-list();model_status<-list();dream_diagnostics<-list()
+  se_checks<-list();background_rows<-list();messages<-list();model_status<-list();dream_diagnostics<-list()
   retry_attempts<-list();background_impact<-list()
   for(region in names(sources))for(kind in c('linear','age_factor','age_factor_slide')) {
     spec<-paste(region,kind,sep='_');design<-mouse_design(d,kind)
@@ -138,8 +156,8 @@ if(mode=='mouse') {
     rho<-duplicateCorrelation(vcorr,design$x,block=d$cage)$consensus.correlation
     need(is.finite(rho),paste('相关参数不可用',spec))
     corr<-fit_voom(vcorr,design$x,d$cage,rho)
-    audits[[paste0(spec,'_base')]]<-audit_se(v,design$x,spec,'baseline')
-    audits[[paste0(spec,'_fixed')]]<-audit_se(vf,design$fixed,spec,'cage_fixed')
+    se_checks[[paste0(spec,'_base')]]<-check_se_parameterization(v,design$x,spec,'baseline')
+    se_checks[[paste0(spec,'_fixed')]]<-check_se_parameterization(vf,design$fixed,spec,'cage_fixed')
     cat('运行',spec,'dream，共',length(background),'基因\n')
     dream_shared<-checked_dream(v,design$dream,design$data,background,spec,'dream_shared',param,cfg$dream_ebayes_robust)
     vn<-variancePartition::voomWithDreamWeights(g,design$dream,design$data,BPPARAM=param)
@@ -201,7 +219,7 @@ if(mode=='mouse') {
   wr(do.call(rbind,decomposition),file.path(out,'mouse_precision.csv.gz'))
   wr(do.call(rbind,variance),file.path(out,'mouse_variance.csv.gz'))
   wr(do.call(rbind,diagnostics),file.path(out,'mouse_designs.csv'))
-  wr(do.call(rbind,audits),file.path(out,'mouse_SE_implementation_audit.csv.gz'))
+  wr(do.call(rbind,se_checks),file.path(out,'mouse_SE_decomposition_check.csv.gz'))
   bg<-do.call(rbind,background_rows)
   wr(bg,file.path(out,'mouse_background_fits.csv.gz'))
   wr(bg[bg$status!='available',],file.path(out,'mouse_fit_failures.csv'))

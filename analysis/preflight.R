@@ -30,6 +30,8 @@ if(mode=='check') {
   source(file.path(a[3],'tests','test_dream_retry.R'))
   run_dream_retry_unit_tests()
   run_dream_merge_regression()
+  source(file.path(a[3],'tests','test_matched.R'))
+  run_matched_regression(a[3])
   run_dream_retry_smoke(if(length(a)>=4L)a[4] else NULL)
   # 真正启动一个SOCK工作进程，发现仅requireNamespace无法暴露的snow问题。
   cat('预检查：SOCK工作进程\n')

@@ -16,7 +16,7 @@ exact_wls_target <- function(y,w,x,target) {
 }
 
 # 在完全相同的响应和权重上交叉比较参数化与收缩设置，不按结果选择设置。
-audit_se <- function(v,x,spec,branch) {
+check_se_parameterization <- function(v,x,spec,branch) {
   need(inherits(v,'EList'),'SE核查需要含表达矩阵和逐观测权重的limma EList对象')
   truth<-exact_wls_target(v$E,v$weights,x,'genotype')
   raw<-limma::lmFit(v,x);j<-match('genotype',colnames(x))
@@ -27,7 +27,7 @@ audit_se <- function(v,x,spec,branch) {
   z<-cbind(groupWT=1-x[,j],group5X=x[,j],x[,setdiff(seq_len(ncol(x)),c(1,j)),drop=FALSE])
   need(qr(cbind(x,z))$rank==ncol(x),'两种参数化的模型空间不一致')
   ct<-setNames(rep(0,ncol(z)),colnames(z));ct[1:2]<-c(-1,1)
-  legacy<-limma::contrasts.fit(limma::lmFit(v,z),ct)
+  contrast_fit<-limma::contrasts.fit(limma::lmFit(v,z),ct)
   # 在原组均值参数化上逐基因直接计算 c'(X'WX)^-1c，不使用公共相关矩阵近似。
   exact_contrast<-vapply(seq_len(nrow(v$E)),function(i) {
     q<-qr(z*sqrt(v$weights[i,]));inv<-chol2inv(qr.R(q));c0<-ct[q$pivot]
@@ -40,15 +40,15 @@ audit_se <- function(v,x,spec,branch) {
        '精确线性对比方差与直接目标系数不一致')
   need(max(abs(exact_refit_se/truth$unscaled-1))<1e-7,
        'contrastAsCoef精确重拟合未通过QR核查')
-  need(max(abs(raw$coefficients[,j]-legacy$coefficients[,1]),na.rm=TRUE)<1e-7,
+  need(max(abs(raw$coefficients[,j]-contrast_fit$coefficients[,1]),na.rm=TRUE)<1e-7,
        '两种参数化的目标系数不一致')
   out<-data.frame(gene_symbol=truth$gene_symbol,spec=spec,branch=branch,
-    beta_direct=raw$coefficients[,j],beta_contrast=legacy$coefficients[,1],
+    beta_direct=raw$coefficients[,j],beta_contrast=contrast_fit$coefficients[,1],
     unscaled_exact=truth$unscaled,unscaled_direct=raw$stdev.unscaled[,j],
-    unscaled_contrast=legacy$stdev.unscaled[,1],
+    unscaled_contrast=contrast_fit$stdev.unscaled[,1],
     unscaled_contrast_exact=exact_contrast,unscaled_contrast_refit=exact_refit_se)
   for(robust in c(FALSE,TRUE)) {
-    d<-moderate(raw,robust);l<-moderate(legacy,robust)
+    d<-moderate(raw,robust);l<-moderate(contrast_fit,robust)
     id<-match(out$gene_symbol,rownames(d$coefficients));il<-match(out$gene_symbol,rownames(l$coefficients))
     suffix<-if(robust)'robust' else 'ordinary'
     out[[paste0('SE_direct_',suffix)]]<-d$stdev.unscaled[id,j]*sqrt(d$s2.post[id])
@@ -204,8 +204,12 @@ replace_dream_raw_row <- function(background,retry_fit,gene) {
   need(!any(vapply(forbidden,function(k)!is.null(background[[k]])||!is.null(retry_fit[[k]]),logical(1))),
        '不能合并已经经验贝叶斯收缩的dream结果')
   ids<-rownames(background$coefficients);i<-match(gene,ids)
-  need(!is.na(i)&&!anyDuplicated(ids)&&identical(rownames(retry_fit$coefficients),gene),
-       '重试基因必须唯一且已存在于背景；缺失行仍保留为不可用')
+  need(length(gene)==1L&&!is.na(gene)&&length(ids)>0L&&!anyNA(ids)&&!anyDuplicated(ids)&&
+         identical(rownames(retry_fit$coefficients),gene),
+       'Retry requires unique, explicit gene identities')
+  # dream may remove failed rows. Restore an accepted raw row before joint eBayes.
+  append<-is.na(i);new_ids<-if(append)c(ids,gene) else ids
+  if(append)i<-length(new_ids)
   need(identical(names(background),names(retry_fit)),'dream原始拟合字段不一致')
   matrices<-c('coefficients','stdev.unscaled','df.residual','df.total','t','p.value',
               'z.std','residuals','hatvalues')
@@ -221,16 +225,19 @@ replace_dream_raw_row <- function(background,retry_fit,gene) {
       need(length(dim(a))==2L&&length(dim(b))==2L&&nrow(a)==length(ids)&&nrow(b)==1L&&
            ncol(a)==ncol(b)&&identical(colnames(a),colnames(b)),paste('dream矩阵维度不一致：',k))
       need(identical(rownames(a),ids)&&identical(rownames(b),gene),paste('dream矩阵行名不一致：',k))
-      out[[k]][i,]<-b[1,]
+      if(append)out[[k]]<-rbind(a,b) else out[[k]][i,]<-b[1,]
     } else if(k%in%vectors) {
       need(is.atomic(a)&&is.atomic(b)&&length(a)==length(ids)&&length(b)==1L,
            paste('dream逐基因向量长度不一致：',k))
-      out[[k]][i]<-b[1]
+      need(is.null(names(a))||identical(names(a),ids),paste('Unaligned named vector:',k))
+      need(is.null(names(b))||identical(names(b),gene),paste('Unaligned retry vector:',k))
+      if(append)out[[k]]<-c(a,unname(b)) else out[[k]][i]<-b[1]
+      names(out[[k]])<-if(is.null(names(a)))NULL else new_ids
     } else if(k=='cov.coefficients.list') {
       need(is.list(a)&&is.list(b)&&identical(names(a),ids)&&identical(names(b),gene),
            'dream逐基因协方差未按基因对应')
-      need(identical(dimnames(a[[i]]),dimnames(b[[1]])),'dream协方差系数顺序不一致')
-      out[[k]][[i]]<-b[[1]]
+      need(identical(dimnames(a[[1]]),dimnames(b[[1]])),'dream协方差系数顺序不一致')
+      if(append)out[[k]]<-c(a,b) else out[[k]][[i]]<-b[[1]]
     } else need(identical(a,b),paste('dream共同设计字段发生改变：',k))
   }
   for(k in c('varComp','edf')) {
@@ -239,10 +246,13 @@ replace_dream_raw_row <- function(background,retry_fit,gene) {
     if(k=='varComp') {
       need(identical(rownames(a),ids)&&identical(rownames(b),gene)&&identical(colnames(a),colnames(b)),
            'dream方差组分标识不一致')
-      a[i,]<-b[1,]
+      if(append)a<-rbind(a,b) else a[i,]<-b[1,]
     } else {
       need(length(a)==length(ids)&&length(b)==1L,'dream有效自由度长度不一致')
-      a[i]<-b[1]
+      named<-!is.null(names(a))
+      need(!named||identical(names(a),ids),'Unaligned effective-df names')
+      if(append)a<-c(a,unname(b)) else a[i]<-b[1]
+      names(a)<-if(named)new_ids else NULL
     }
     attr(out,k)<-a
   }
@@ -254,6 +264,10 @@ replace_dream_raw_row <- function(background,retry_fit,gene) {
   need(!length(attr(out,'error.initial')),'dream存在未解决的整体初始拟合错误')
   need(dream_metrics_agree(dream_raw_metrics(out,gene),dream_raw_metrics(retry_fit,gene)),
        '合并后原始估计与重试结果不一致')
+  need(identical(rownames(out$coefficients),new_ids),'Merged gene order changed')
+  unchanged<-setdiff(ids,gene)
+  need(identical(out$coefficients[unchanged,,drop=FALSE],
+                 background$coefficients[unchanged,,drop=FALSE]),'Healthy coefficients changed during merge')
   out
 }
 
@@ -279,7 +293,7 @@ checked_dream <- function(v,formula,d,genes,spec,model,param,robust=FALSE,
   diagnostics<-data.frame(gene_symbol=character(),status=character(),message=character())
   attempts<-data.frame(gene_symbol=character(),optimizer=character(),clean=logical(),
     beta=numeric(),SE_raw=numeric(),df_raw=numeric(),logLik=numeric(),sigma=numeric(),
-    cage_variance=numeric(),message=character(),accepted=logical())
+    cage_variance=numeric(),message=character(),accepted=logical(),merged=logical(),merge_error=character())
   impact<-data.frame(gene_symbol=character(),spec=character(),model=character(),
     beta_with=numeric(),beta_without=numeric(),SE_with=numeric(),SE_without=numeric(),
     p_with=numeric(),p_without=numeric())
@@ -305,6 +319,8 @@ checked_dream <- function(v,formula,d,genes,spec,model,param,robust=FALSE,
       for(gene in bad) {
         cat('dream定点复核',spec,model,gene,'\n')
         probes[[gene]]<-probe_dream_retry(gene,call_fit,controls)
+        probes[[gene]]$table$merged<-FALSE
+        probes[[gene]]$table$merge_error<-''
         attempts<-rbind(attempts,probes[[gene]]$table)
       }
       accepted<-names(probes)[vapply(probes,function(x)x$accepted,logical(1))]
@@ -312,9 +328,18 @@ checked_dream <- function(v,formula,d,genes,spec,model,param,robust=FALSE,
         for(gene in accepted) {
           merged<-tryCatch(replace_dream_raw_row(f,probes[[gene]]$fit,gene),error=function(e)e)
           if(inherits(merged,'error')) {
+            attempts$merge_error[attempts$gene_symbol==gene]<-conditionMessage(merged)
             diagnostics<-rbind(diagnostics,data.frame(gene_symbol=gene,status='retry_merge_failed',
               message=conditionMessage(merged)))
+            folder<-Sys.getenv('PAPER1_DIAGNOSTICS_DIR')
+            if(nzchar(folder)) {
+              dir.create(folder,recursive=TRUE,showWarnings=FALSE)
+              name<-gsub('[^A-Za-z0-9_.-]','_',paste(spec,model,gene,sep='__'))
+              saveRDS(list(background=f,retry=probes[[gene]]$fit,gene=gene,
+                error=conditionMessage(merged)),file.path(folder,paste0(name,'.rds')))
+            }
           } else {
+            attempts$merged[attempts$gene_symbol==gene]<-TRUE
             f<-merged;recovered<-c(recovered,gene)
             diagnostics$status[diagnostics$gene_symbol==gene]<-'recovered_optimizer_agreement'
           }
