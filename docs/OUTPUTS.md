@@ -1,62 +1,62 @@
-# 输出与论文逐项核对
+# Results and Completion
 
-## 主要结果表
+## Output Tree
 
-| 文件 | 一行表示什么 | 主要列 |
-|---|---|---|
-| panel.csv | 本次额叶选中基因 | gene_symbol、beta、p、q、n |
-| ortholog_panel.csv | 人类面板端点及其小鼠对应 | gene_symbol、mouse_gene |
-| human_results.csv.gz | 一个基因×亚类×对比×模型臂 | beta、SE、df、p、q_joint、区间、status |
-| human_paired_changes.csv.gz | 同一端点的质量调整差值 | delta、SE_delta、p、q_joint、SE_HC3、q_HC3_joint |
-| human_designs.csv | 一个亚类×对比 | n、设计列数、可估计状态 |
-| human_gene_membership.csv | 一个亚类×面板基因 | 输入是否有该符号、过滤后是否保留、匹配规则 |
-| correction_scope.csv | 一个明确校正family×分母策略 | planned、available、denominator、significant |
-| human_correction_scope_summary.csv | 模型臂×范围×分母策略 | 临床状态可用数、显著数、基础临床集合保留数 |
-| mouse_results.csv.gz | 一个面板端点×规格×模型 | beta、SE、df、p、q_base_fixed_joint、q_three_model_joint、q_dream_joint、rho |
-| mouse_precision.csv.gz | 一个背景基因×规格 | SE_ratio、design_factor、posterior_factor、reweight_factor |
-| mouse_variance.csv.gz | 一个背景基因×规格×权重策略 | 笼方差、残差尺度、ICC、同笼动物对平均相关、边界与收敛 |
-| mouse_SE_implementation_audit.csv.gz | 一个背景基因×规格×主模型 | 精确QR、直接系数、精确对比、contrastAsCoef、近似对比及两类收缩SE/p |
-| mouse_background_fits.csv.gz | 一个背景基因×规格×模型 | 全背景效应、区间和可用状态 |
-| mouse_model_status.csv | 一个规格×模型 | 计划数、可用数、失败数 |
-| mouse_fit_failures.csv | 一个失败的背景拟合 | 基因、规格、模型和状态 |
-| mouse_model_messages.csv | 一条模型错误或警告 | 规格、模型、原始消息 |
-| mouse_dream_diagnostics.csv | 一个问题基因或一条未定位警告 | gene_symbol、spec、model、status、message |
-| simulation_failures.csv | 一条数值失败或结构性不可估计 | 完整情境、重复编号、原因 |
-| result_audit.json | 整体结果核查 | 分母检查、失败数、旧稿差异数 |
-| manuscript_comparison.csv | 一个旧稿关键数值 | 旧值、新值、比较容差和是否一致 |
-| mouse_designs.csv | 小鼠六种设定 | 动物数、笼数、混合笼数、信息比例 |
-| simulation_summary.csv | 布局×相关×偏移×效应×模型 | 偏差、SD、SE、覆盖、拒绝、宽度、失败率 |
-| calibration/calibration_summary.csv | 配对检验校准情境 | 同上及质量项F拒绝率 |
+| Directory | Content |
+| --- | --- |
+| core/raw | Verified public downloads |
+| core/prepared | Newly generated discovery, human and mouse inputs |
+| core/results | Main coefficients, paired changes, families, precision, variance and calibration |
+| matched/results | Eight human variants, seven mouse arms, count-pipeline summaries and failure inventory |
+| benchmark/final_results | General paired calibration and five-model cage comparison |
+| supplementary | Nine supplementary groups, per-stage inputs/results and completion receipts |
+| figures | Eight main numerical displays, PDF/PNG and CSV |
+| reporting/S01 ... S20 | Full-precision supplementary CSV exports |
+| reporting/block_sources.csv | 105 workbook-block references to computed source tables |
+| reporting/source_index.csv | Export size, row count and SHA256 |
+| reporting/figures | Twelve supplementary PDF/PNG displays and their numerical sources |
 
-`simulation_replicates.csv.gz`保留逐次结果便于审计，不装进审阅ZIP。阶段计数和下载文件保留在本地，GitHub仓库不携带它们。
+These are source tables, not an Excel/Word typesetting engine. A single table may supply multiple display blocks. Full families are exported, including null results and missing test slots; a selected figure need not display every source row. Numerical identity checks use the estimates from the same experiment.
 
-`mouse_dream_diagnostics.csv`只有表头表示未捕获需定位的数值警告。基因名为空表示警告尚未定位，不等于不存在问题。拟合失败或数值警告都不能作为“阴性基因”计数。
+## Key Results
 
-## 图表
+- core/results/human_results.csv.gz: coefficients, SE, df, p and reserved-family q.
+- core/results/human_paired_changes.csv.gz: covariance-aware and HC3 difference tests.
+- core/results/human_precision.csv.gz: exact per-gene two-factor SE decomposition.
+- core/results/mouse_precision.csv.gz: design, posterior-SD and reweighting factors.
+- core/results/mouse_variance.csv.gz: cage variance, boundaries and availability.
+- matched/results/count_pipeline_summary.csv: scenario/model FDR, power and coverage.
+- matched/results/count_pipeline_unavailable_genes.csv: full missing gene-level records.
+- matched/results/count_pipeline_diagnostic_inventory.csv: dataset/model denominator counts.
 
-1. Figure1：临床状态端点系数；该对比基础显著集合的q值变化；效应比和SE比分布。
-2. Figure2：同一临床状态显著集合的配对系数差与95%区间，不混入条件临床对比。
-3. Figure3：小鼠六种设定的SE三因子经验分布。
-4. Figure4：共享/原生两套权重的可用基因ICC分布；CSV同时保留可用、失败和边界计数。
-5. Figure5：不同布局和模型的偏差、拒绝率、宽度、覆盖与失败。
-6. Figure6：配对检验经验SD与估计SE、零假设拒绝率及两SD备择功效。
-7. Figure7：小鼠方法内与两模型联合校正计数，分开展示校正family。
-8. Figure8：相同输入下，对比变换和经验贝叶斯设置各自带来的SE比。
+Gene rows and dataset-model counts have different units. Match their explicit keys; do not infer the number of missing evaluations from the number of unique genes.
 
-每幅图同名CSV提供实际绘图及其相关明细；大表压缩保存在results，发表时可据需要只提供图示汇总。这里的图号为新代码图号，**不是自动覆盖当前Word中的图号**。
+## Completion States
 
-## 重新分析完成后如何核对论文
+INTEGRATED_ANALYSES_COMPLETE means all requested main and supplementary processes and exports finished. RESULT_EXPORTS_COMPLETE identifies the final reporting export. Neither status asserts that the results equal every manuscript number. PRIMARY_ANALYSES_COMPLETE is deliberately narrower and is used only with --primary-only.
 
-先核对来源和单位，再看p值：
+Implementation coverage in inputs/paper_coverage.json is separate from execution. Source integration, unit tests, successful server execution and numerical agreement with a manuscript are four different checks.
 
-1. 新面板基因数及基因身份是否与稿件一致。
-2. SEA-AD供体、亚类、各模型完整病例数量是否一致；质量变量定义是否相同。
-3. 小鼠纳入/排除原因、动物ID、cage、slide及皮层标签是否一致。
-4. 共同背景基因数、TMM、voom、经验贝叶斯设置与family是否一致。
-5. 最后比较系数、SE、q值、区间及论文计数。
+Unavailable individual tests and prespecified non-estimability remain explicit. Technical errors stop a stage. Whole failed empirical arms cannot count as successful matched-model tasks. Missing p values occupy reserved multiplicity slots but remain missing in exported inference.
 
-发现不一致时应先输出差异解释，不能把新结果覆盖成旧数值。尤其不能用“都不显著”代替数值复现，也不能因需要40条记录就改BH范围。
+## Figures
 
-## 不在本版中的内容
+Main figures show human estimates, testing families, seven mouse arms, precision decomposition, general paired calibration, count validation, cage means/correlation and within-cage allocation.
 
-其他探索队列、旧版18个规格的候选图、全部旧补充图的版式及历史布局模拟不在本次原样重绘范围。本包覆盖新的核心分析链，并不声称与现有Word每个补充数字一一对应。研究者完成核对后，才能据新结果决定是否更新论文和补充材料。
+Supplementary Figures S1-S12 show donor quality, astrocyte estimates, mouse panel consistency, cage ICC, layout rejection, coefficient/precision changes, design approximation, joint/paired tests, the diagnostic workflow, selected coefficient changes, donor-conditioned calibration and general-grid cancellation/power. PDF is the vector output; PNG is a preview.
+
+## Supplementary Simulation Inputs
+
+The completed `supplementary/simulations/attempt_*` directory contains
+`simulation_animal_order.csv` and `simulation_input_order.json`, recording the
+animal-to-random-draw mapping and its hashes. These accompany `scenarios.csv`,
+`layout_units.csv`, `layout_registry.csv`, R versions and per-repetition results.
+Existing completed experiments without the two additional order files remain
+interpretable using their prepared mouse metadata and layout inputs; collection
+does not invent new execution records for them.
+
+## Collection
+
+collect_results.py copies the completed reporting/ and figures/ directories with completion and environment records. Supplementary numerical summaries and compact per-repetition result tables are retained where required for verification. It excludes raw counts, prepared expression matrices and cell-level annotations. It creates a normal directory, never a ZIP.
+
+Do not publish runtime results or software environments as part of the minimal source checkout. No remote archive is created automatically.
