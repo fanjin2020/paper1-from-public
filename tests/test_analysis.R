@@ -17,19 +17,19 @@ run_analysis_regression <- function() {
   # voom返回EList，普通list并非lmFit接受的表达对象；测试使用相同的正式数据类。
   v<-methods::new('EList',list(E=y,weights=w))
   stopifnot(inherits(v,'EList'),identical(v$E,y),identical(v$weights,w))
-  z<-audit_se(v,x,'synthetic','baseline')
+  z<-check_se_parameterization(v,x,'synthetic','baseline')
   stopifnot(nrow(z)==120L,max(abs(z$unscaled_exact/z$unscaled_direct-1))<1e-8)
   stopifnot(max(abs(z$unscaled_contrast_exact/z$unscaled_direct-1))<1e-8,
             max(abs(z$unscaled_contrast_refit/z$unscaled_direct-1))<1e-8)
   # 年龄平移不改变精确目标SE；近似对比在相同模型空间内可能改变。
   xc<-x;xc[,'age']<-x[,'age']-mean(x[,'age']);attr(xc,'raw_age')<-x[,'age']+20
-  zc<-audit_se(v,xc,'synthetic','baseline')
+  zc<-check_se_parameterization(v,xc,'synthetic','baseline')
   stopifnot(max(abs(zc$unscaled_direct-z$unscaled_direct))<1e-10)
   stopifnot(max(abs(zc$SE_contrast_uncentered_ordinary-zc$SE_contrast_ordinary))>1e-4)
   stopifnot(max(abs(z$unscaled_contrast/z$unscaled_exact-1))>1e-4)
   # 零/常数权重差异不存在时，对比近似恢复到精确解。
   flat<-v;flat$weights[,]<-1
-  flat_audit<-audit_se(flat,x,'unweighted','baseline')
+  flat_audit<-check_se_parameterization(flat,x,'unweighted','baseline')
   stopifnot(max(abs(flat_audit$unscaled_contrast/flat_audit$unscaled_exact-1))<1e-10)
   # 测试警告定位逻辑，不以安装了variancePartition为前提。
   fake<-function(ids)if('g3'%in%ids)warning('Model failed to converge: negative eigenvalue')
@@ -53,12 +53,12 @@ run_analysis_regression <- function() {
   stopifnot(all(is.finite(z$SE_direct_ordinary)),all(is.finite(z$SE_direct_robust)),
             all(is.finite(z$SE_contrast_ordinary)),all(is.finite(z$SE_contrast_robust)))
   # 错误对象和无效权重在进入limma之前给出具体错误，不能自动丢弃权重。
-  wrong<-try(audit_se(list(E=y,weights=w),x,'synthetic','baseline'),silent=TRUE)
+  wrong<-try(check_se_parameterization(list(E=y,weights=w),x,'synthetic','baseline'),silent=TRUE)
   stopifnot(inherits(wrong,'try-error'),grepl('EList',as.character(wrong),fixed=TRUE))
   invalid<-v;invalid$weights[1,1]<-0
-  stopifnot(inherits(try(audit_se(invalid,x,'synthetic','baseline'),silent=TRUE),'try-error'))
+  stopifnot(inherits(try(check_se_parameterization(invalid,x,'synthetic','baseline'),silent=TRUE),'try-error'))
   invalid<-v;invalid$weights<-w[,-1,drop=FALSE]
-  stopifnot(inherits(try(audit_se(invalid,x,'synthetic','baseline'),silent=TRUE),'try-error'))
+  stopifnot(inherits(try(check_se_parameterization(invalid,x,'synthetic','baseline'),silent=TRUE),'try-error'))
   bad<-x;bad[,4]<-bad[,3]
   stopifnot(inherits(try(exact_wls_target(y,w,bad,'genotype'),silent=TRUE),'try-error'))
   cat('EList接口、精确加权系数、四组合标准误及无效输入回归检查通过\n')

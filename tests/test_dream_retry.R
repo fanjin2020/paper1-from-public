@@ -79,7 +79,7 @@ run_dream_merge_regression <- function() {
   cat('dream原始合并：正常行不变及6项错误输入检查通过\n')
 }
 
-# 先写出诊断，再核验结果；失败时审阅包中应有具体原因而不只是最终断言。
+# Save numerical diagnostics before checking the smoke-test result.
 write_dream_smoke_report <- function(ans,report_dir) {
   if(!is.null(report_dir)) {
     dir.create(report_dir,recursive=TRUE,showWarnings=FALSE)
