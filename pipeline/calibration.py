@@ -127,8 +127,8 @@ def run(metadata_path, output, repeats=2500, seed=20261005):
     from scipy import stats
     output = Path(output)
     output.mkdir(parents=True,exist_ok=True)
-    if (output/'calibration_summary.csv').exists():
-        raise FileExistsError('结果已存在；请使用新的输出目录，避免覆盖')
+    # The core stage receipt controls continuation. An unreceipted summary is
+    # incomplete and must be recalculated, never accepted as completed work.
     meta = pd.read_csv(metadata_path)
     config = dict(repeats=repeats,seed=seed,contexts=int(meta.context.nunique()),contrasts=3,
                   weights=['uniform','fixed_nucleus_count_gradient'],

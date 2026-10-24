@@ -235,13 +235,16 @@ def sea_inventory(cache):
     return sorted(result, key=lambda x: x["key"])
 
 
-def prepare_seaad(cache, out):
+def prepare_seaad(cache, out, run_id=None):
     """读取 SEA-AD 原始 UMIs 层并汇总到供体与作者细胞亚类。
 
     cache 保存下载和供体级 NPZ；out 保存计数准备所需的小型记录表。
     保留作者纳入标记，核对供体、脑区与人口学字段，返回聚合矩阵和单位记录。"""
     import h5py
 
+    need(run_id, "Raw-input run identity is required for donor preparation")
+    donor_cache = out / "donor_cache"
+    donor_cache.mkdir(exist_ok=True)
     inventory = sea_inventory(cache)
     write_csv(out / "source_object_inventory.csv", inventory)
     blocks = []
@@ -252,8 +255,8 @@ def prepare_seaad(cache, out):
         name = Path(entry["key"]).name
         donor_file = name.split("_SEAAD_")[0]
         path = cache / name
-        checkpoint = cache / (donor_file + "_pseudobulk.npz")
-        signature = entry["key"] + entry["etag"] + str(entry["size"]) + VERSION
+        checkpoint = donor_cache / (donor_file + "_pseudobulk.npz")
+        signature = entry["key"] + entry["etag"] + str(entry["size"]) + VERSION + run_id
         if checkpoint.exists():
             z = verified_npz(checkpoint)
             need(str(z["fingerprint"]) == signature, "Changed donor checkpoint")
@@ -261,9 +264,11 @@ def prepare_seaad(cache, out):
             data = z["values"]
             rows = json.loads(str(z["rows"]))
             audit = json.loads(str(z["audit"]))
+            if "schema" in z.files:
+                schemas.append(json.loads(str(z["schema"])))
         else:
             need(
-                shutil.disk_usage(cache).free > entry["size"] + 2 * 2**30,
+                shutil.disk_usage(cache).free > (0 if path.is_file() else entry["size"]) + 2 * 2**30,
                 "Insufficient disk for next donor file; free space, do not select fewer donors",
             )
             path = download(S3 + entry["key"], path)
@@ -384,6 +389,7 @@ def prepare_seaad(cache, out):
                 rows=json.dumps(rows),
                 audit=json.dumps(audit),
                 fingerprint=signature,
+                schema=json.dumps(schemas[-1]),
             )
         excluded.append(audit)
         if rows:
