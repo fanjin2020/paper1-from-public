@@ -1,0 +1,17 @@
+{
+  "R": "4.5.3",
+  "packages": {
+    "jsonlite": "2.0.0",
+    "Matrix": "1.7.6",
+    "edgeR": "4.8.2",
+    "limma": "3.66.0",
+    "SeuratObject": "5.4.0",
+    "variancePartition": "1.40.2",
+    "BiocParallel": "1.44.0",
+    "snow": "0.4.4",
+    "lme4": "2.0.6",
+    "lmerTest": "3.2.1",
+    "pbkrtest": "0.5.5",
+    "statmod": "1.5.2"
+  }
+}

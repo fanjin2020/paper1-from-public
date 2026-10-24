@@ -1,0 +1,19 @@
+{
+  "input_boundary": "Publicly deposited UMI/count objects, microarray expression matrices and source metadata; not FASTQ alignment or CEL reprocessing.",
+  "analyses": [
+    {"id":"discovery","status":"implemented","description":"GSE118553 panel discovery, public annotation and human-mouse orthology","entry":"pipeline.core"},
+    {"id":"human_primary","status":"implemented","description":"SEA-AD donor aggregation, paired models and testing families","entry":"pipeline.core"},
+    {"id":"mouse_primary","status":"implemented","description":"GSE233208 animal aggregation, cage models, SE and variance diagnostics","entry":"pipeline.core"},
+    {"id":"human_matched","status":"implemented","description":"Eight matched-input sensitivity variants","entry":"pipeline.matched"},
+    {"id":"mouse_seven_arm","status":"implemented","description":"Seven-arm matched mouse fits and Mundlak diagnostics","entry":"pipeline.matched"},
+    {"id":"counts","status":"implemented","description":"1600 complete count-to-inference datasets","entry":"pipeline.matched"},
+    {"id":"fixed_design","status":"implemented","description":"Donor-conditioned calibration, general paired tests and five-model cage benchmark","entry":"pipeline.calibration / pipeline.benchmark"},
+    {"id":"main_figures","status":"implemented","description":"Eight main figures and numeric source tables; not pixel-identical typesetting","entry":"pipeline.figures"},
+    {"id":"external_cohorts","status":"implemented","description":"S8/S9: public bulk, newly annotated human astrocytes and five additional public cohorts","entry":"pipeline.supplementary.driver: bulk/external/astro"},
+    {"id":"cognition","status":"implemented","description":"S10: GSE1297 preparation and three MMSE models","entry":"pipeline.supplementary.driver: cognition"},
+    {"id":"interactions_mixtures","status":"implemented","description":"S11: fresh annotation, doublet scores, six cell-class interactions and broad-class mixtures","entry":"pipeline.supplementary.driver: interactions/mixtures"},
+    {"id":"input_sensitivities","status":"implemented","description":"S5/S6: age and quality/weight sensitivities on freshly prepared inputs","entry":"pipeline.supplementary.driver: age/quality"},
+    {"id":"extended_simulations","status":"implemented","description":"S18/S19: conditional two-model and layout-specific three-model simulations","entry":"pipeline.supplementary.driver: simulations"},
+    {"id":"supplementary_derivations","status":"implemented","description":"S01-S20 numeric CSV exports, 105-block source map and 12 computational displays; not identical Excel/Word typesetting","entry":"pipeline.reporting / pipeline.supplementary_figures"}
+  ]
+}
