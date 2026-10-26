@@ -14,6 +14,6 @@
     {"id":"interactions_mixtures","status":"implemented","description":"S11: fresh annotation, doublet scores, six cell-class interactions and broad-class mixtures","entry":"pipeline.supplementary.driver: interactions/mixtures"},
     {"id":"input_sensitivities","status":"implemented","description":"S5/S6: age and quality/weight sensitivities on freshly prepared inputs","entry":"pipeline.supplementary.driver: age/quality"},
     {"id":"extended_simulations","status":"implemented","description":"S18/S19: conditional two-model and layout-specific three-model simulations","entry":"pipeline.supplementary.driver: simulations"},
-    {"id":"supplementary_derivations","status":"implemented","description":"S01-S20 numeric CSV exports, 105-block source map and 12 computational displays; not identical Excel/Word typesetting","entry":"pipeline.reporting / pipeline.supplementary_figures"}
+    {"id":"supplementary_derivations","status":"implemented","description":"S01-S20 numeric CSV exports, 112-block workbook and source map, and 12 computational displays; Word typesetting is not regenerated","entry":"pipeline.reporting / pipeline.workbook / pipeline.supplementary_figures"}
   ]
 }
