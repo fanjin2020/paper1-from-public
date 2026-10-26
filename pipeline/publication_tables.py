@@ -13,7 +13,10 @@ import pandas as pd
 from .io import require
 from .supplementary.common import reserved_bh
 
-VERSION = 'publication_exports_20261024_v2'
+VERSION = 'publication_exports_20261026_v3'
+BLOCK_COUNTS = (3,3,11,4,5,6,4,3,4,2,6,11,4,5,4,4,7,3,6,17)
+EXPECTED_BLOCKS = {f'S{s}.{i}' for s,n in enumerate(BLOCK_COUNTS,1) for i in range(1,n+1)}
+INPUT_DEFINITIONS_URL = 'https://github.com/fanjin2020/paper1-from-public/blob/v2.1.0/docs/DATA.md'
 KEY = ['spec', 'gene_symbol']
 ICC_EDGES = [-np.inf, .01, .10, .20, np.inf]
 ICC_LABELS = ['<0.01', '0.01-0.10', '0.10-0.20', '>=0.20']
@@ -259,6 +262,36 @@ def layout_membership(layout, five_model_results, three_model_results):
     return z
 
 
+def resource_catalog():
+    roles = {
+        'GSE118553':'Candidate-panel discovery input', 'SEA-AD':'Primary human and donor-conditioned analyses',
+        'GSE233208':'Primary mouse analysis and observed design geometry', 'GSE48350':'Supplementary bulk endpoints',
+        'GSE1297':'Supplementary cognition associations', 'GSE168137':'Supplementary external endpoints',
+        'GSE157827':'Supplementary external endpoints', 'GSE92926':'Supplementary external endpoints',
+        'GSE134151':'Supplementary external endpoints', 'GSE243292':'Astrocyte reference input',
+        'GSE167490':'Supplementary astrocyte comparison', 'GSE222007':'Supplementary interactions and mixtures'}
+    rows = []
+    for accession, role in roles.items():
+        sea = accession == 'SEA-AD'
+        spec = ('DFC RNA-seq final-nuclei release 2026-06-22.' if sea else 'GEO accession '+accession+'.')
+        rows.append(dict(resource=accession, analysis_role=role,
+            relationship='primary' if accession in ('SEA-AD','GSE233208') else ('panel_selection' if accession=='GSE118553' else 'supplementary'),
+            public_source='https://brain-map.org/consortia/sea-ad' if sea else 'https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc='+accession,
+            input_specification=spec+' Input definitions and download code: public release v2.1.0.'))
+    return pd.DataFrame(rows)
+
+
+def simulation_jobs(protocol):
+    """Expand the complete protocol array without changing job definitions."""
+    jobs = protocol.get('jobs')
+    require(isinstance(jobs,list) and jobs, 'Missing simulation job definitions')
+    fields = ['id','phase','start','end','spec']
+    require(all(isinstance(j,dict) and set(j)==set(fields) for j in jobs), 'Unexpected simulation job schema')
+    require(len({j['id'] for j in jobs})==len(jobs), 'Duplicate simulation job IDs')
+    return pd.DataFrame([dict(job_id=j['id'], phase=j['phase'], start=j['start'], end=j['end'],
+        specification=json.dumps(j['spec'],sort_keys=True,ensure_ascii=False)) for j in jobs])
+
+
 def complete(ex, root, supplements):
     """Rebind blocks to their declared statistical objects, not just a file count."""
     read = lambda p: pd.read_csv(p, low_memory=False)
@@ -268,25 +301,7 @@ def complete(ex, root, supplements):
             row['blocks'] = ','.join(x for x in row['blocks'].split(',') if x and x != block)
         return ex.add(f'S{int(block.split(".")[0][1:]):02}', name, frame=frame, blocks=block, description=definition)
     h, mouse = read(c/'human_results.csv.gz'), read(c/'mouse_results.csv.gz')
-    resource_roles = {
-        'GSE118553':'Candidate-panel discovery input', 'SEA-AD':'Primary human and donor-conditioned analyses',
-        'GSE233208':'Primary mouse analysis and observed design geometry', 'GSE48350':'Supplementary bulk endpoints',
-        'GSE1297':'Supplementary cognition associations', 'GSE168137':'Supplementary external endpoints',
-        'GSE157827':'Supplementary external endpoints', 'GSE92926':'Supplementary external endpoints',
-        'GSE134151':'Supplementary external endpoints', 'GSE243292':'Astrocyte reference input',
-        'GSE167490':'Supplementary astrocyte comparison', 'GSE222007':'Supplementary interactions and mixtures'}
-    receipts = list((root/'core/raw').rglob('*.download.json'))+list((root/'supplementary/raw').rglob('*.download.json'))
-    resources=[]
-    for accession, role in resource_roles.items():
-        matched=[]
-        for path in receipts:
-            text=path.read_text(encoding='utf-8')
-            if accession.lower() in (path.name+' '+text).lower():matched.append(path.relative_to(root).as_posix())
-        resources.append(dict(resource=accession,analysis_role=role,
-            relationship='primary' if accession in ('SEA-AD','GSE233208') else ('panel_selection' if accession=='GSE118553' else 'supplementary'),
-            download_receipts=';'.join(sorted(matched)),
-            provenance='Current-run download receipts and core/raw_cache_import.json; no archived expression results imported.'))
-    put('S1.2','publication_resources',pd.DataFrame(resources),'Resource roles and pointers to current public-download receipts.')
+    put('S1.2','publication_resources',resource_catalog(),'Resource roles, public data entry points and input specifications.')
     t = correction_tables(h, mouse)
     for block, key in [('S3.7', 'families'), ('S3.8', 'retention'), ('S3.9', 'summary'),
                        ('S3.10', 'transitions'), ('S3.11', 'values'), ('S4.3', 'continuous')]:

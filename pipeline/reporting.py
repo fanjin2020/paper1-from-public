@@ -178,12 +178,13 @@ class Exports:
             for block in record['blocks'].split(','):
                 if block:
                     rows.append(dict(block=block, file=record['file'], description=record['description']))
-        require(len({r['block'] for r in rows}) == 105, 'Incomplete workbook-block source map')
+        require(len({r['block'] for r in rows}) == len(publication.EXPECTED_BLOCKS), 'Incomplete workbook-block source map')
         require(len(rows) == len({r['block'] for r in rows}), 'A block must have one explicit combined source')
-        expected={f'S{s}.{i}' for s,n in enumerate([3,3,11,4,5,5,4,3,4,1,6,11,4,5,4,4,7,3,6,12],1)
-                  for i in range(1,n+1)}
+        expected=publication.EXPECTED_BLOCKS
         require({r['block'] for r in rows} == expected, 'Unexpected workbook block identifiers')
         pd.DataFrame(rows).to_csv(self.root/'block_sources.csv', index=False)
+        from .workbook import generate as write_workbook
+        write_workbook(self.root)
         return index
 
 
@@ -256,6 +257,8 @@ def generate(root, output, supplements):
     for i, name in enumerate(['human_sensitivity_discoveries','human_paired_family_and_selected_subset',
                               'human_donor_sex_counts','human_input_manifest'],2):
         ex.add('S06',name,source=m/(name+'.csv'),blocks='S6.'+str(i))
+    ex.add('S06','human_context_sex_counts',source=m/'human_context_sex_counts.csv',blocks='S6.6',
+           description='Human sex counts by clinical group and analysis context.')
     geo, vif = [], []
     for i, record in enumerate(read(c/'human_designs.csv').itertuples(index=False),1):
         for arm in ('base','quality'):
@@ -289,7 +292,8 @@ def generate(root, output, supplements):
     ex.add('S09','field_dictionary',frame=dictionary,blocks='S9.3')
     ex.add('S09','primary_focal_results',frame=external[external.primary_focus_36_member.eq(True)],blocks='S9.4')
     ex.add('S10','cognition',source=supplements['cognition']/'231_all_fixed_gene_results.csv',blocks='S10.1')
-    ex.add('S10','cognition_signatures',source=supplements['cognition']/'232_all_fixed_signature_results.csv')
+    ex.add('S10','cognition_signatures',source=supplements['cognition']/'232_all_fixed_signature_results.csv',blocks='S10.2',
+           description='CAMERA cognition gene-set tests.')
     interactions = read(supplements['interactions']/'298_all_fixed_interaction_results.csv')
     ex.add('S11','interactions',frame=interactions,blocks='S11.1,S11.6',description='Full family, including nonsignificant and missing tests.')
     ex.add('S11','doublet_seed_stability',source=supplements['interactions']/'doublet_seed_summary.csv',blocks='S11.2')
@@ -368,7 +372,11 @@ def generate(root, output, supplements):
     ex.add('S20','general_ranges',frame=ranges,blocks='S20.8')
     for i,name in enumerate(['count_scenarios','count_pipeline_summary','count_pipeline_paired_summary','count_pipeline_diagnostic_inventory'],9):
         ex.add('S20',name,source=m/(name+'.csv'),blocks='S20.'+str(i))
-    ex.add('S20','count_pipeline_unavailable_genes',source=m/'count_pipeline_unavailable_genes.csv')
+    for i,name in enumerate(['count_pipeline_per_dataset','count_pipeline_paired_per_dataset',
+                             'count_pipeline_unavailable_genes','count_generator_parameters'],13):
+        ex.add('S20',name,source=m/(name+'.csv'),blocks='S20.'+str(i))
+    ex.add('S20','simulation_jobs',frame=publication.simulation_jobs(protocol),blocks='S20.17',
+           description='Complete fixed-design simulation job definitions; one job per row.')
     publication.complete(ex, root, supplements)
     return ex.finish()
 
@@ -386,8 +394,10 @@ def main(argv=None):
         from .supplementary_figures import generate as draw
         figures = draw(output)
         dump(output/'status.json',dict(status='RESULT_EXPORTS_COMPLETE',run_id=run_id,
-             files=len(index), sections=20, workbook_blocks_mapped=105, supplementary_figures=len(figures),
-             scope='Numeric source tables; not a claim of equality to a manuscript or identical workbook layout'))
+             files=len(index), sections=20, workbook_blocks_mapped=len(publication.EXPECTED_BLOCKS), supplementary_figures=len(figures),
+             workbook='Supplementary_Tables.xlsx', workbook_sha256=sha(output/'Supplementary_Tables.xlsx'),
+             reporting_version=publication.VERSION,
+             scope='Numeric source tables and 112-block workbook; manuscript agreement requires separate verification'))
     except BaseException as exc:
         dump(output/'status.json',dict(status='FAILED',run_id=run_id,reason=str(exc)))
         raise
