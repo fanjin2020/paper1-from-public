@@ -84,8 +84,9 @@ class ReportingTests(unittest.TestCase):
     def test_block_map_rejects_duplicate_semantic_owners(self):
         with tempfile.TemporaryDirectory() as d:
             ex=R.Exports(Path(d))
-            expected=[f'S{s}.{i}' for s,n in enumerate([3,3,11,4,5,5,4,3,4,1,6,11,4,5,4,4,7,3,6,12],1) for i in range(1,n+1)]
-            ex.index=[dict(section='S01',blocks=','.join(expected),file='all.csv',description='test')]
+            expected=sorted(R.publication.EXPECTED_BLOCKS)
+            ex.add('S01','all',frame=pd.DataFrame({'example':[1]}),
+                   blocks=','.join(expected),description='test')
             self.assertEqual(len(ex.finish()),1)
             ex.index.append(dict(section='S01',blocks='S1.1',file='second.csv',description='ambiguous'))
             with self.assertRaisesRegex(ValueError,'explicit combined'):
