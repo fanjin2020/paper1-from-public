@@ -93,14 +93,17 @@ def export(root, out, runtime):
                 recorded=Path(C.read_json(root/'supplementary'/(name+'.complete.json'))['directory']).resolve()
                 C.need((portable or recorded==path.resolve()) and path.is_dir(), 'Supplementary attempt mismatch: '+name)
             report=out/'reporting';report.mkdir()
-            print('REBUILD 20 TABLE SECTIONS / 105 EXPLICIT BLOCKS',flush=True)
+            print('REBUILD 20 WORKSHEETS / 112 EXPLICIT BLOCKS / XLSX',flush=True)
             index=reporting.generate(root,report,supplements)
+            plan.checks['source_table_blocks']=C.validate_block_mapping(list(C.csv_records(root/'reporting/block_sources.csv')))
+            plan.checks['table_blocks']=len(publication_tables.EXPECTED_BLOCKS)
             print('DRAW 12 SUPPLEMENTARY FIGURES',flush=True)
             plots=supplementary_figures.generate(report)
             print('DRAW 8 MAIN FIGURES',flush=True)
             figures.generate(root/'core',root/'matched',root/'benchmark',out/'figures')
             C.write_json(report/'status.json',dict(status='RESULT_EXPORTS_COMPLETE',run_id=plan.checks['run_id'],
-                files=len(index),sections=20,workbook_blocks_mapped=105,supplementary_figures=len(plots),
+                files=len(index),sections=20,workbook_blocks_mapped=len(publication_tables.EXPECTED_BLOCKS),supplementary_figures=len(plots),
+                workbook='Supplementary_Tables.xlsx',workbook_sha256=C.sha256(report/'Supplementary_Tables.xlsx'),
                 reporting_version=publication_tables.VERSION,model_refits=False,manuscript_agreement='NOT_ASSESSED'))
             C.need(identity()==export_code, 'Export source changed while running')
             for folder in ('pipeline','analysis','tests','inputs','docs'):
@@ -126,8 +129,9 @@ def export(root, out, runtime):
                 excluded=plan.excluded))
             (out/'README_REVIEW.md').write_text(
                 '# Paper1 re-exported verification materials\n\n'
-                '20 sections, 105 explicit block sources, 8 main and 12 supplementary figures.\n'
-                'No fitting, simulations, downloads or XLSX conversion were performed.\n'
+                '20 worksheets, 112 explicit block sources, 8 main and 12 supplementary figures.\n'
+                'reporting/Supplementary_Tables.xlsx contains all 112 sections with an S01 catalog.\n'
+                'No fitting, simulations or downloads were performed. The workbook was assembled from computed results.\n'
                 'Original run files remain unchanged. Scientific tables in core/matched/benchmark/supplementary are byte-for-byte copies.\n'
                 'reporting contains derived publication tables. Consult block_sources.csv for each block.\n'
                 'S4.2 summarizes all finite clinical log pairs; selection is counted separately.\n'

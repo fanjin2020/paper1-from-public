@@ -63,10 +63,16 @@ See [re-export instructions](docs/REEXPORT.md) for environment and provenance de
 - `supplementary/`: nine public-input supplementary analysis groups.
 - `figures/`: eight main result displays with numerical sources.
 - `reporting/S01` through `S20`: full-precision CSV source tables.
-- `reporting/block_sources.csv`: source mapping for the 105 supplementary workbook blocks.
+- `reporting/block_sources.csv`: source mapping for all 112 supplementary workbook blocks.
+- `reporting/Supplementary_Tables.xlsx`: 20 worksheets, 112 blocks and an S01 catalog with header-row locations.
+- `reporting/workbook_manifest.json`: workbook checksum, block sources and record counts.
 - `reporting/figures/`: 12 supplementary numerical displays.
 
-Repeated table/figure views share numerical sources. The exports do not recreate Word layout, Excel styling, or pixel-identical artwork. Within-run numerical checks verify coefficient, standard-error, degrees-of-freedom and interval identities. Scientific results can be compared by their explicit gene, model, sample and testing-family keys.
+Repeated table/figure views share numerical sources. The workbook includes S6.6 (context-specific sex counts), S10.2 (CAMERA) and S20.13-S20.17 (dataset-level count results, paired results, unavailable positions, generator parameters and complete simulation jobs). Its data come from the completed experiment, not a reference workbook. Word layout and pixel-identical artwork are not regenerated. Scientific results can be compared by their explicit gene, model, sample and testing-family keys.
+
+S1.2 gives public data entry points and input versions. Original download receipts remain in the run records. Protocol filenames such as `mouse_units.csv` identify generated inputs. Machine-specific directories are omitted only from the workbook display; complete protocol records remain in CSV and JSON. The complete job list is expanded in S20.17 instead of being truncated to Excel's cell-length limit.
+
+The archived v2.1.0 export map contains 105 blocks. This source update uses reporting version `publication_exports_20261026_v3` and exports 112 blocks directly. The re-exporter accepts completed 105-block runs without refitting them. No public tag or archived DOI is changed by editing this checkout.
 
 S18 simulations retain the order of the prepared animal metadata. Their draw-position
 table and input/order hashes are recorded with the simulation outputs. Use the same
@@ -92,6 +98,7 @@ python collect_results.py \
 | pipeline/benchmark.py | General paired and five-model cage benchmarks |
 | pipeline/supplementary/driver.py | Age, quality, external cohorts, cognition, annotation, interactions, mixtures and layouts |
 | pipeline/reporting.py | Derived summaries and 20-section numeric export |
+| pipeline/workbook.py | Streaming 112-block XLSX assembly; no extra spreadsheet package |
 | pipeline/figures.py; pipeline/supplementary_figures.py | Data-driven PDF/PNG displays |
 | pipeline/cache.py; pipeline/lifecycle.py | Download-only reuse and experiment identity |
 | analysis/ | R preparation, fitting and inference |
