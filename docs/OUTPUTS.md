@@ -12,11 +12,17 @@
 | supplementary | Nine supplementary groups, per-stage inputs/results and completion receipts |
 | figures | Eight main numerical displays, PDF/PNG and CSV |
 | reporting/S01 ... S20 | Full-precision supplementary CSV exports |
-| reporting/block_sources.csv | 105 workbook-block references to computed source tables |
+| reporting/block_sources.csv | 112 workbook-block references to computed source tables |
+| reporting/Supplementary_Tables.xlsx | 20 worksheets and 112 complete sections, with the S01 catalog |
+| reporting/workbook_manifest.json | Workbook SHA256, source mapping, counts and header rows |
 | reporting/source_index.csv | Export size, row count and SHA256 |
 | reporting/figures | Twelve supplementary PDF/PNG displays and their numerical sources |
 
-These are source tables, not an Excel/Word typesetting engine. A single table may supply multiple display blocks. Full families are exported, including null results and missing test slots; a selected figure need not display every source row. Numerical identity checks use the estimates from the same experiment.
+The workbook is assembled from the indexed CSVs. A single source can supply multiple blocks. Full families are exported, including null results and missing test slots; a selected figure need not display every source row. Word layout is not regenerated.
+
+S6.6 contains context-specific human sex counts, S10.2 contains CAMERA results, and S20.13-S20.17 contain per-dataset count metrics, paired metrics, unavailable positions, generator parameters and complete simulation jobs. These seven blocks extend the 105-block layout in archived v2.1.0. The new exporter requires exactly 112 block identifiers; collection can also read completed legacy 105-block runs for re-export.
+
+S1.2 uses public entry points and input-version definitions. Workbook protocol displays omit machine-specific directories and identify generated input filenames. CSV/JSON protocol records and download receipts remain complete. Protocol job arrays are displayed as a reference to the losslessly expanded S20.17 instead of exceeding Excel's 32,767-character cell limit. Unexpected overlong cells stop the export rather than being truncated.
 
 ## Key Results
 

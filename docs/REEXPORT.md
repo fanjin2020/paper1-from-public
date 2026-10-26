@@ -4,11 +4,17 @@ This operation reads one completed public-input experiment. It does not refit mo
 repeat simulations, download data or install software. It is distinct from a fresh
 reproduction, which must still recompute all scientific analyses.
 
+It now generates `reporting/Supplementary_Tables.xlsx` with 20 worksheets and 112
+blocks, including the seven detailed-result blocks absent from the archived
+v2.1.0 workbook map. Both completed legacy 105-block runs and verified portable
+collections can be inputs. Original scientific results and completion records
+remain unchanged. The exporter version is `publication_exports_20261026_v3`.
+
 ```bash
 conda activate paper1
 cd /home/research/git/repository/paper1-from-publicV1
 python paper1_reexport_results.py \
-  --run /home/research/git/repository/paper1_complete_from_public_v1
+  --run /home/research/git/repository/paper1_complete_from_public_20261022_v2
 ```
 
 The script selects the interpreter recorded in `software.json` and checks only the
@@ -50,6 +56,21 @@ python paper1_reexport_results.py --verify /path/to/the/exported/directory
   additional diagnostic fields. S2.3 checks within-run fitted numerical identities.
   S16.3 documents precision-component definitions.
 
+- S1.2 links to public resource pages and input definitions, including SEA-AD DFC
+  release 2026-06-22. Raw download receipts remain in the run archive.
+- S6.6 and S10.2 provide context-specific sex counts and CAMERA results.
+  S20.13-S20.16 provide full count-pipeline details, and S20.17 expands every
+  simulation job from the recorded protocol without changing its definition.
+- Parameter-table input filenames identify generated files. Software locations
+  are displayed by package name. The CSV/JSON sources retain original paths.
+  The XLSX writer uses the Python standard library and adds no package downloads.
+
+To rebuild only the workbook from an already generated 112-block reporting
+directory, run `python -m pipeline.workbook --reporting /path/to/reporting`.
+For a 105-block directory, use the full re-export command above to first generate
+the missing blocks from the completed experiment. Workbook generation requires
+the complete indexed source tables and verifies their hashes and row counts.
+
 - S4.2 summarizes all finite paired clinical log components. `n_decomposable` is
   the distribution denominator; `n_selected` counts base q < 0.05 separately.
 - S9 leaves disease-direction comparisons missing for interaction coefficients such
@@ -65,7 +86,7 @@ python paper1_reexport_results.py --verify /path/to/the/exported/directory
 
 The original experiment is read-only, including its code identity and completion records.
 The exporter has its own code identity in `export_provenance.json`; its source is under
-`export_source_snapshot`. It is not mislabelled as the source that fitted the experiment.
+`export_source_snapshot`. It is not mislabeled as the source that fitted the experiment.
 Raw inputs and large temporary simulation objects are not copied.
 For corrected publication definitions, use `reporting/block_sources.csv` and its
 mapped tables. Immutable scientific-source copies can retain earlier derived labels;
