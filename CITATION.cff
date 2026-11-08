@@ -1,9 +1,10 @@
 cff-version: 1.2.0
 message: "Please cite this software version and the associated manuscript when using this analysis."
-title: "Distinguishing coefficient changes from precision costs in brain transcriptome analysis"
+title: "AdjScope-Tx: a diagnostic framework for covariate adjustment in transcriptomic analysis"
 type: software
-version: 2.1.0
-date-released: 2026-10-24
+license: MIT
+version: 2.1.0+submission.20261108
+date-released: 2026-11-08
 authors:
   - family-names: Fan
     given-names: Jin

@@ -1,13 +1,106 @@
 # 论文1：从公开输入完整重算
 
-本仓库复现论文 Distinguishing coefficient changes from precision costs in brain transcriptome analysis 的主分析与补充分析。统一入口从公开表达对象和元数据生成分析输入、拟合、模拟、图件和完整数值表。
+本仓库对应论文 AdjScope-Tx: a diagnostic framework for covariate adjustment in transcriptomic analysis。统一入口从公开表达对象和元数据生成分析输入、拟合、模拟、图件和完整数值表。
+
+源码和配套文档采用 [MIT 许可证](LICENSE)。公开原始数据仍遵循各数据源的使用条款。
+
+## 完整计数流程的配对系数差校准
+
+### HC3尾部和权重来源定向增强
+
+已完成完整校准后，运行以下独立增强入口，无需重跑24,000个旧数据集：
+
+```bash
+conda activate paper1
+bash run_paired_tail_diagnostics.sh --profile full --workers 36 \
+  --output "$HOME/adjscope/p1_paired_tail_full"
+```
+
+六个场景在查看完整计数网格后选定，每场景500个新模拟数据集、每个3,000个基因；新随机种子与原实验分离。
+对比原估计权重、独立计数估计权重、固定单位权重及高斯响应，保留模型方差和HC3两种检验。
+输出极小p值、Bonferroni家族错误率、BH-FDR、表达分层及异常基因记录。
+这是定位异常的实验，不预先声称某个对照能修复FDR，也不改变原检验。
+
+```bash
+bash run_paired_tail_diagnostics.sh --status --output "$HOME/adjscope/p1_paired_tail_full"
+bash run_paired_tail_diagnostics.sh --resume --workers 36 --output "$HOME/adjscope/p1_paired_tail_full"
+```
+
+完成后只回传 `review_tail.zip`。原校准目录保持不动；新模块拒绝写入其他实验的结果目录。
+详细设计和边界见 [增强说明](paired_tail_diagnostics/README.md)。
+
+### 原完整校准入口
+
+新增独立入口 `run_paired_count_calibration.sh`，在每个模拟数据集中重新运行
+负二项计数生成、filterByExpr、TMM、voom、两个模型拟合及原有配对差异检验。
+这项实验检验系数差，不是已有设计增强实验中的基因型主效应检验。
+
+```bash
+conda activate paper1
+bash run_paired_count_calibration.sh --profile full --workers 36 \
+  --output "$HOME/adjscope/p1_paired_count_full"
+```
+
+完整规模为24个场景、每场景1000个独立数据集、每个数据集3000个基因。
+默认使用明确指定的模拟均值与离散度，不下载数据；可以通过 `--parameters` 指定已有的
+`mean_count,dispersion` 参数表。每次仍重新生成计数和拟合，不读取旧检验结果。
+R环境沿用论文指定版本，不安装或升级软件。
+
+```bash
+# 查看累计完成数据集数。
+bash run_paired_count_calibration.sh --status --output "$HOME/adjscope/p1_paired_count_full"
+# 重启后续跑，必须使用相同结果目录。
+bash run_paired_count_calibration.sh --resume --workers 36 --output "$HOME/adjscope/p1_paired_count_full"
+```
+
+输出同时报告模型方差/HC3、共享/分模型voom权重的FPR、BH-FDR、区间覆盖率和可用率。
+每个完整数据集有校验回执；仅有任务文件、结果缺失或损坏的任务会重跑。
+完成后只需回传结果目录中的 `review.zip`，服务器上的任务文件保留用于断点续跑。
+这次校准的真值是“所有配对系数差为零”，部分基因可以同时具有真实暴露效应；
+它不提供非零配对差异的功效或混合零假设下的强FDR证据，也不覆盖任意连续暴露或笼内相关。
+24,000个数据集的校准结果已纳入表S22，3,000次定向诊断已纳入表S23。设计依据和输出定义见 [校准说明](paired_count_calibration/README.md)。
+
+## 投稿包的核验与绘图
+
+本地代码已整合设计诊断模块0.2.0及配对检验校准报告。投稿稿件包含10张主图、15张补充图和补充表S1-S23。
+
+运行 `python paper1_calibration_report.py` 可从校验过的紧凑结果生成新报告目录，不下载数据、不重跑模拟、不改动原始检验。报告分别保留计划家族和过滤后家族的BH结果，并列显示覆盖率、FDR和Bonferroni错误率，不自动选择表现较好的检验。运行 `python paper1_plot_figures.py` 可重现全部投稿图。
+`python verify_publication.py` 核验随包数值与校验和；`python paper1_plot_figures.py` 重绘全部投稿图件。
+二者不下载研究数据、不重新拟合。补充表精简数值位于 `publication_tables/`，完整分析输出由主流程生成。
+
+已经完成的增强实验只需运行 `python paper1_design_fix.py --previous-results "$HOME/adjscope/p1_design_completed"`。
+此命令另建汇总目录，保持原结果只读。新增实验、续跑和统计解释见 [运行说明](docs/PUBLICATION.md)。
+
+## 可选的设计诊断增强
+
+新增 [AdjScope-Tx 设计诊断模块](design_extension/README_CN.md)。运行
+`bash run_design_extension.sh`，默认36进程、小规模试运行。模块使用已完成复跑的公开计数输入和元数据，
+重新标定生成器并拟合新增模拟，不读取旧模型结果，不改变原论文复现流程。
+输出包括组内信息、可估计性、条件化偏差、五模型计数模拟及整组留出设计评估。
+设计信息本身不能给出通用FDR阈值；报告按明确的生成条件评估风险并保留不推荐任何模型的结果。
+
+## 单独重绘投稿图
+
+独立绘图包位于 [publication_figures](publication_figures/README.md)，包含绘图代码及34份经校验的数值输入，可直接重绘10张主图和15张补充图：
+
+```bash
+python publication_figures/make_figures.py
+```
+
+输出位于 `publication_figures/output/`，包含矢量PDF、可编辑SVG和PNG预览。依赖单列于 `publication_figures/requirements.txt`，脚本不自动安装软件。图号和数据来源见 [图表索引](publication_figures/FIGURE_INDEX.md)。
+
+服务器推荐使用 `python paper1_plot_figures.py`，自动检查已有兼容环境，并在代码目录同级新建 `p1_fig_年月日_时分秒_*` 输出目录。不安装软件包，不下载研究数据，不覆盖已有结果。可加 `--check-env` 只查环境，或用 `--python /已有/python` 指定环境。
+
+这个入口使用随包提供的固定绘图数据，不下载研究数据、不重新拟合。下面的完整分析入口不读取这些绘图数据，仍从公开输入重新生成全部分析结果。完整分析的数值展示图与投稿图采用各自的编号顺序。
 
 ## 运行
+
+以下命令在仓库根目录执行。`$HOME/adjscope` 是示例结果父目录，请按实际输入和结果位置设置路径。
 
 **已完成实验只需重新导出时，不要启动全量复跑。** 使用：
 
 ```bash
-python paper1_reexport_results.py --run /home/research/git/repository/paper1_complete_from_public_20261022_v2
+python paper1_reexport_results.py --run "$HOME/adjscope/paper1_complete_from_public_v1"
 ```
 
 入口只检查原运行记录中的 NumPy、pandas、SciPy、Matplotlib，不要求 openpyxl 或 R。
@@ -25,10 +118,9 @@ Windows 建议放在 `C:\p1\` 等短父目录，不要重复嵌套同名结果�
 
 ```bash
 conda activate paper1
-cd /home/research/git/repository/paper1-from-publicV1
 python reproduce_from_public.py --check-env
 python reproduce_from_public.py --workers 60 \
-  --output /home/research/git/repository/paper1_complete_from_public_v1
+  --output "$HOME/adjscope/paper1_complete_from_public_v1"
 ```
 
 新输出目录必须为空。默认执行主分析和全部补充分析，不需要添加模块开关。只有明确使用 `--primary-only` 才会省略补充分析。
@@ -56,9 +148,9 @@ paper1_complete_from_public_20261022，并自动检查同级已有的论文1原�
 ## 查看和续跑
 
 ```bash
-python run.py --status --output /home/research/git/repository/paper1_complete_from_public_v1
+python run.py --status --output "$HOME/adjscope/paper1_complete_from_public_v1"
 python reproduce_from_public.py --workers 60 --resume \
-  --output /home/research/git/repository/paper1_complete_from_public_v1
+  --output "$HOME/adjscope/paper1_complete_from_public_v1"
 ```
 
 续跑保留首次运行的缓存及环境参数，只接着使用同一次实验中校验通过的完成任务。未完成的补充模块在新的 attempt 目录重算；独立模拟场景有单独的完成记录。改变科学代码、参数或软件后必须另开输出目录，不能强行续跑。进程数可调整。不要删除锁文件强行启动第二个写入进程。
@@ -85,14 +177,14 @@ python reproduce_from_public.py --workers 60 --resume \
 
 S18 的模拟保持预处理小鼠表的行顺序，并记录 simulation_animal_order.csv 和 simulation_input_order.json，包括动物与随机抽样位置的对应关系、输入哈希及随机种子。相同种子只有在样本顺序、输入、模型和软件一致时才指定同一模拟。程序不为对齐某组结果重排动物。两个记录文件不改变科学计算；已有完整运行仍可由其预处理元数据和 layout_units.csv 核实。
 
-另外生成八张主结果图和十二张补充数值展示图。它们用于核对当前数据，不保证与手工排版图逐像素一致；不自动改Word。Excel由当前结果自动组装，不读取作者手工整理的投稿工作簿。
+完整分析另外生成八张主结果图和十二张补充数值展示图，用于核对当前运行的数值；不自动改Word。重绘投稿版图件使用上方的独立绘图入口。Excel由当前结果自动组装，不读取作者手工整理的投稿工作簿。
 
 跑完后只收集最终表格、图和必要环境记录：
 
 ```bash
 python collect_results.py \
-  --run /home/research/git/repository/paper1_complete_from_public_v1 \
-  --output /home/research/git/repository/paper1_complete_results_for_review
+  --run "$HOME/adjscope/paper1_complete_from_public_v1" \
+  --output "$HOME/adjscope/paper1_complete_results_for_review"
 ```
 
 不打 ZIP，不复制原始计数、细胞级标签或模拟任务目录。只有完整分析和导出均完成后才允许收集。

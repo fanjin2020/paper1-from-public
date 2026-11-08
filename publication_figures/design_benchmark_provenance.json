@@ -1,0 +1,26 @@
+{
+  "profile": "full",
+  "count_reps": 50,
+  "gaussian_reps": 500,
+  "seed": 20261101,
+  "fdr_screen": 0.075,
+  "run_id": "ba4e3d313c39f877aafca63ca2b013e9b59fbc63556ceb6ed56ea9db2e389d98",
+  "inputs": {
+    "prepared/mouse_units.csv": "b3d2bd5b27ebd342ee2dcb7bde9c95f7ebb833aa3219e85cbc8098a4b95ee251",
+    "prepared/mouse_whole_counts.csv.gz": "c471f9b8f29f582a5e8d25aa0e9bcd82ed87b1b0f41ae209512f6fa377e7f950",
+    "prepared/mouse_cortex_counts.csv.gz": "6818b2d092e106dec3a5ffd64dcfdddf51de6795c7c9a7303f2c941e169df6a3"
+  },
+  "gaussian_genes": 256,
+  "count_genes": 13312,
+  "nominal_bh": 0.05,
+  "training_cages": [
+    12,
+    36
+  ],
+  "heldout_cages": [
+    18
+  ],
+  "generating_context_required": true,
+  "interval_method_global_null": "Clopper-Pearson",
+  "interval_method_nonnull": "bounded Student-t approximation to mean dataset FDP; conservative bound for all-zero samples"
+}

@@ -1,0 +1,220 @@
+{
+  "scenarios": [
+    {
+      "id": "s01",
+      "index": 1,
+      "n": 40,
+      "rho": 0.3,
+      "depth": "equal",
+      "exposure_fraction": 0,
+      "design_seed": 40040
+    },
+    {
+      "id": "s02",
+      "index": 2,
+      "n": 40,
+      "rho": 0.3,
+      "depth": "equal",
+      "exposure_fraction": 0.2,
+      "design_seed": 40040
+    },
+    {
+      "id": "s03",
+      "index": 3,
+      "n": 40,
+      "rho": 0.3,
+      "depth": "iid_lognormal",
+      "exposure_fraction": 0,
+      "design_seed": 40040
+    },
+    {
+      "id": "s04",
+      "index": 4,
+      "n": 40,
+      "rho": 0.3,
+      "depth": "iid_lognormal",
+      "exposure_fraction": 0.2,
+      "design_seed": 40040
+    },
+    {
+      "id": "s05",
+      "index": 5,
+      "n": 40,
+      "rho": 0.7,
+      "depth": "equal",
+      "exposure_fraction": 0,
+      "design_seed": 40040
+    },
+    {
+      "id": "s06",
+      "index": 6,
+      "n": 40,
+      "rho": 0.7,
+      "depth": "equal",
+      "exposure_fraction": 0.2,
+      "design_seed": 40040
+    },
+    {
+      "id": "s07",
+      "index": 7,
+      "n": 40,
+      "rho": 0.7,
+      "depth": "iid_lognormal",
+      "exposure_fraction": 0,
+      "design_seed": 40040
+    },
+    {
+      "id": "s08",
+      "index": 8,
+      "n": 40,
+      "rho": 0.7,
+      "depth": "iid_lognormal",
+      "exposure_fraction": 0.2,
+      "design_seed": 40040
+    },
+    {
+      "id": "s09",
+      "index": 9,
+      "n": 80,
+      "rho": 0.3,
+      "depth": "equal",
+      "exposure_fraction": 0,
+      "design_seed": 40080
+    },
+    {
+      "id": "s10",
+      "index": 10,
+      "n": 80,
+      "rho": 0.3,
+      "depth": "equal",
+      "exposure_fraction": 0.2,
+      "design_seed": 40080
+    },
+    {
+      "id": "s11",
+      "index": 11,
+      "n": 80,
+      "rho": 0.3,
+      "depth": "iid_lognormal",
+      "exposure_fraction": 0,
+      "design_seed": 40080
+    },
+    {
+      "id": "s12",
+      "index": 12,
+      "n": 80,
+      "rho": 0.3,
+      "depth": "iid_lognormal",
+      "exposure_fraction": 0.2,
+      "design_seed": 40080
+    },
+    {
+      "id": "s13",
+      "index": 13,
+      "n": 80,
+      "rho": 0.7,
+      "depth": "equal",
+      "exposure_fraction": 0,
+      "design_seed": 40080
+    },
+    {
+      "id": "s14",
+      "index": 14,
+      "n": 80,
+      "rho": 0.7,
+      "depth": "equal",
+      "exposure_fraction": 0.2,
+      "design_seed": 40080
+    },
+    {
+      "id": "s15",
+      "index": 15,
+      "n": 80,
+      "rho": 0.7,
+      "depth": "iid_lognormal",
+      "exposure_fraction": 0,
+      "design_seed": 40080
+    },
+    {
+      "id": "s16",
+      "index": 16,
+      "n": 80,
+      "rho": 0.7,
+      "depth": "iid_lognormal",
+      "exposure_fraction": 0.2,
+      "design_seed": 40080
+    },
+    {
+      "id": "s17",
+      "index": 17,
+      "n": 160,
+      "rho": 0.3,
+      "depth": "equal",
+      "exposure_fraction": 0,
+      "design_seed": 40160
+    },
+    {
+      "id": "s18",
+      "index": 18,
+      "n": 160,
+      "rho": 0.3,
+      "depth": "equal",
+      "exposure_fraction": 0.2,
+      "design_seed": 40160
+    },
+    {
+      "id": "s19",
+      "index": 19,
+      "n": 160,
+      "rho": 0.3,
+      "depth": "iid_lognormal",
+      "exposure_fraction": 0,
+      "design_seed": 40160
+    },
+    {
+      "id": "s20",
+      "index": 20,
+      "n": 160,
+      "rho": 0.3,
+      "depth": "iid_lognormal",
+      "exposure_fraction": 0.2,
+      "design_seed": 40160
+    },
+    {
+      "id": "s21",
+      "index": 21,
+      "n": 160,
+      "rho": 0.7,
+      "depth": "equal",
+      "exposure_fraction": 0,
+      "design_seed": 40160
+    },
+    {
+      "id": "s22",
+      "index": 22,
+      "n": 160,
+      "rho": 0.7,
+      "depth": "equal",
+      "exposure_fraction": 0.2,
+      "design_seed": 40160
+    },
+    {
+      "id": "s23",
+      "index": 23,
+      "n": 160,
+      "rho": 0.7,
+      "depth": "iid_lognormal",
+      "exposure_fraction": 0,
+      "design_seed": 40160
+    },
+    {
+      "id": "s24",
+      "index": 24,
+      "n": 160,
+      "rho": 0.7,
+      "depth": "iid_lognormal",
+      "exposure_fraction": 0.2,
+      "design_seed": 40160
+    }
+  ]
+}

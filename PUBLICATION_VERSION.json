@@ -1,0 +1,11 @@
+{
+  "publication_snapshot": "ISCLS-20261108",
+  "software_citation_version": "2.1.0+submission.20261108",
+  "core_protocol_version": "2.1.0",
+  "design_extension_version": "0.2.0",
+  "main_figures": 10,
+  "supplementary_figures": 15,
+  "supplementary_table_sections": 98,
+  "paired_count_datasets": 24000,
+  "paired_tail_datasets": 3000
+}

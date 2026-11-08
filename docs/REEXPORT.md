@@ -12,9 +12,8 @@ remain unchanged. The exporter version is `publication_exports_20261026_v3`.
 
 ```bash
 conda activate paper1
-cd /home/research/git/repository/paper1-from-publicV1
 python paper1_reexport_results.py \
-  --run /home/research/git/repository/paper1_complete_from_public_20261022_v2
+  --run "$HOME/adjscope/paper1_complete_from_public_v1"
 ```
 
 The script selects the interpreter recorded in `software.json` and checks only the

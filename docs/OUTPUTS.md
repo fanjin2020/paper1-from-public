@@ -2,6 +2,10 @@
 
 ## Output Tree
 
+This table describes the full core-analysis exports, including the complete
+gene-level workbook. The compact submission tables and the separate design
+benchmark are indexed under [Publication package](PUBLICATION.md).
+
 | Directory | Content |
 | --- | --- |
 | core/raw | Verified public downloads |
@@ -51,6 +55,22 @@ Main figures show human estimates, testing families, seven mouse arms, precision
 
 Supplementary Figures S1-S12 show donor quality, astrocyte estimates, mouse panel consistency, cage ICC, layout rejection, coefficient/precision changes, design approximation, joint/paired tests, the diagnostic workflow, selected coefficient changes, donor-conditioned calibration and general-grid cancellation/power. PDF is the vector output; PNG is a preview.
 
+### Publication Artwork
+
+The separate [publication figure package](../publication_figures/README.md)
+renders the manuscript's ten main and fifteen supplementary figures:
+
+```bash
+python publication_figures/make_figures.py
+```
+
+Its outputs go to `publication_figures/output/`, outside experiment directories.
+The [figure index](../publication_figures/FIGURE_INDEX.md) gives the publication
+order and source-table mapping; this order differs from the analysis displays
+listed above. Included compact extracts are fixed plotting inputs, never inputs
+to the public-data analysis pipeline. Rendering them neither reruns an experiment
+nor changes a run's completion status.
+
 ## Supplementary Simulation Inputs
 
 The completed `supplementary/simulations/attempt_*` directory contains
@@ -65,4 +85,7 @@ does not invent new execution records for them.
 
 collect_results.py copies the completed reporting/ and figures/ directories with completion and environment records. Supplementary numerical summaries and compact per-repetition result tables are retained where required for verification. It excludes raw counts, prepared expression matrices and cell-level annotations. It creates a normal directory, never a ZIP.
 
-Do not publish runtime results or software environments as part of the minimal source checkout. No remote archive is created automatically.
+The curated extracts in `publication_figures/data/` reproduce the artwork;
+`publication_tables/data/` contains the 92 compact submission-table sections.
+Do not add full runtime results or software environments to
+the minimal source checkout. No remote archive is created automatically.

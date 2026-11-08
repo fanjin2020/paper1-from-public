@@ -1,0 +1,50 @@
+[
+  {
+    "name": "count_summary",
+    "file": "data/count_summary.csv.gz",
+    "rows": 96,
+    "columns": 48,
+    "sha256": "15b9273a43593500d6ef2c28510eae39002452d2d5f2176eb6aac124ebd0ab36",
+    "source_sha256": "b88f63b7949aadbfe7ecd69392b91fd239542008ff6b1c7b5ce138fe70a53eb6"
+  },
+  {
+    "name": "tail_summary",
+    "file": "data/tail_summary.csv.gz",
+    "rows": 72,
+    "columns": 31,
+    "sha256": "32b7decb8cb2251fd596f771a147b51839e1d506c063f424dccfd18665cfafeb",
+    "source_sha256": "d3ade637a2f6469c0817ebc14a628104dfaf5c8adfc0748cd2c221cee24cd464"
+  },
+  {
+    "name": "tail_rates",
+    "file": "data/tail_rates.csv.gz",
+    "rows": 576,
+    "columns": 15,
+    "sha256": "f3951885bf6a4d853378369c6f285f3e78cedb11223fc3d63129b895181770b3",
+    "source_sha256": "653b92da1bf9a4a5dfbc01c6868a4aa4cefc9cb68f0c6154756b82f73ff3d1ff"
+  },
+  {
+    "name": "paired_comparisons",
+    "file": "data/paired_comparisons.csv.gz",
+    "rows": 336,
+    "columns": 10,
+    "sha256": "61bb73b8e210e212968ab3836a89cfb0cf9ee9000c1032c879ab6ce4b8e3aa6d",
+    "source_sha256": "596e3f26fd14847310c6a199675dd0ec2e12543356573117b2033d096674b7cc"
+  },
+  {
+    "name": "expression_strata",
+    "file": "data/expression_strata.csv.gz",
+    "rows": 216,
+    "columns": 14,
+    "sha256": "b3536361f53a893b4ecaa468cfef9e7b001eefce84fc9ff5222eec672e4f9b88",
+    "source_sha256": "93a0d567ecc4a293225b22a3553b937d078e3c9891185337fdefa5fc75affb58"
+  },
+  {
+    "name": "gaussian_geometry",
+    "file": "data/gaussian_geometry.csv.gz",
+    "rows": 6,
+    "columns": 8,
+    "sha256": "b5de22d4b9aabaf3e037de5262dbbf010ae094c46e3d0652d7cbd4ccc36cd653",
+    "source_sha256": "ed2171f8ee3794083d037e20681f6072b5cf53fae6f8c17236de3688d477cb00"
+  }
+]

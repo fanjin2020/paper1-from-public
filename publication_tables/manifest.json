@@ -1,0 +1,786 @@
+[
+  {
+    "section": "S1.1",
+    "file": "data/S1.1.csv.gz",
+    "rows": 4,
+    "columns": 8,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "bc0db8e3cbd0a35dbb289ab9ee817a0ab03fc6792bad9ec16b7e28b8e9114eae"
+  },
+  {
+    "section": "S1.2",
+    "file": "data/S1.2.csv.gz",
+    "rows": 12,
+    "columns": 5,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "79de458714be5e38ff27356a5707460c32a08acbba19995ec5813ba07fef689d"
+  },
+  {
+    "section": "S2.1",
+    "file": "data/S2.1.csv.gz",
+    "rows": 46,
+    "columns": 29,
+    "scope": "All records significant in either matched association arm after correction over all 17,064 planned positions; q values are not recalculated on this extract.",
+    "sha256": "f13a14ff3c592203460978f9f7173ff13428ec62d5de259efd13438a01ed53ca"
+  },
+  {
+    "section": "S3.1",
+    "file": "data/S3.1.csv.gz",
+    "rows": 9,
+    "columns": 7,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "dfa80892fbe2f4de9fa3f92aaff16ae0effeb583ef2306b0ce4a8b64eb5d0a6e"
+  },
+  {
+    "section": "S3.2",
+    "file": "data/S3.2.csv.gz",
+    "rows": 40,
+    "columns": 29,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "2047481366fb026dd08f788c19f481201ea561d40f8aeef2219b030948fd5e5d"
+  },
+  {
+    "section": "S3.3",
+    "file": "data/S3.3.csv.gz",
+    "rows": 24,
+    "columns": 6,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "cf8fe62a0b1725eb70cae8edd69160a6542b880d792e69dbb052bd61ef5b880d"
+  },
+  {
+    "section": "S3.5",
+    "file": "data/S3.5.csv.gz",
+    "rows": 14,
+    "columns": 4,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "e4d47aa0a22743ce68b670718b411013dbab2d75d6e1f7d1f716449728aef3b7"
+  },
+  {
+    "section": "S3.6",
+    "file": "data/S3.6.csv.gz",
+    "rows": 24,
+    "columns": 17,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "05e649f49dc94641112f36ddbfd5d53ac444cde699da8ce7fa0c2afb71b91253"
+  },
+  {
+    "section": "S4.1",
+    "file": "data/S4.1.csv.gz",
+    "rows": 105,
+    "columns": 14,
+    "scope": "Union of full-family model-based or HC3 coefficient-change discoveries and the 40 base-significant clinical records; correction retains 17,064 planned positions.",
+    "sha256": "dcffb8a11f4e06fbcfe2c0abf7b52f4cf65ae2935f06c4aae0553671497c6457"
+  },
+  {
+    "section": "S4.2",
+    "file": "data/S4.2.csv.gz",
+    "rows": 24,
+    "columns": 10,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "4662e861027a120dfbcd9663cfdd6403282d69fe7d7d9fd5ad863cd5f190b77f"
+  },
+  {
+    "section": "S4.4",
+    "file": "data/S4.4.csv.gz",
+    "rows": 40,
+    "columns": 16,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "b807ba4546b5c4952683bbf09c41058faf3528acd7238826d4c640a42d6babc8"
+  },
+  {
+    "section": "S5.1",
+    "file": "data/S5.1.csv.gz",
+    "rows": 4,
+    "columns": 8,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "cc8eba3284b889bc745441dc3484e172379455aac670bba8375c0f6656f0c665"
+  },
+  {
+    "section": "S5.2",
+    "file": "data/S5.2.csv.gz",
+    "rows": 5,
+    "columns": 17,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "6ab950239e37c71bacff85361bc62bbe830bf817ba7770a724f96b5151623443"
+  },
+  {
+    "section": "S5.3",
+    "file": "data/S5.3.csv.gz",
+    "rows": 2,
+    "columns": 3,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "e9044f4936ff18154b67c77a109e85b59e7457cf10500c8b73d39cf9a5fd7b60"
+  },
+  {
+    "section": "S5.4",
+    "file": "data/S5.4.csv.gz",
+    "rows": 6,
+    "columns": 7,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "d8c03deeea86ec721dd25ab711bc6aa74fddd9cef570d5ae4e27e1e352eaa92a"
+  },
+  {
+    "section": "S5.5",
+    "file": "data/S5.5.csv.gz",
+    "rows": 80,
+    "columns": 8,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "cd8f9a6d7d7ddb5b9bbef0914f9d2991a6a30ac4cf34dfa281ddc8801cc80b8b"
+  },
+  {
+    "section": "S6.1",
+    "file": "data/S6.1.csv.gz",
+    "rows": 14,
+    "columns": 5,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "c22fc5022373143117f3f5cb04988bad81758ec7a96c7c8cf90a8f1bf985234d"
+  },
+  {
+    "section": "S6.2",
+    "file": "data/S6.2.csv.gz",
+    "rows": 16,
+    "columns": 8,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "c9ff780b0878a5a4c42b9aa06c15f9175d53abb33d417ebfbf4a1f14b8748eee"
+  },
+  {
+    "section": "S6.3",
+    "file": "data/S6.3.csv.gz",
+    "rows": 4,
+    "columns": 9,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "e4ed0b111f3a56d110f492357b03ac2a0e31950b09d3080191fa99f38cff73ba"
+  },
+  {
+    "section": "S6.4",
+    "file": "data/S6.4.csv.gz",
+    "rows": 4,
+    "columns": 3,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "5e822294fe58cfdfb99354228ac454cf7faf6ccd49e0cb25382090d65f6eeee8"
+  },
+  {
+    "section": "S6.5",
+    "file": "data/S6.5.csv.gz",
+    "rows": 24,
+    "columns": 4,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "ab17260679813fa7be4b33c7a0e90c1d3747cc483f516c190eb3ffe582288509"
+  },
+  {
+    "section": "S6.6",
+    "file": "data/S6.6.csv.gz",
+    "rows": 96,
+    "columns": 4,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "eee06aad13c394e0c2633efc8205a3174483aff6355221cced70d03935e7a302"
+  },
+  {
+    "section": "S7.1",
+    "file": "data/S7.1.csv.gz",
+    "rows": 144,
+    "columns": 8,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "2f56bf5a31f20b297b4b64b8945f02dc10964cf85dcf94d64b50bce42a52c334"
+  },
+  {
+    "section": "S7.2",
+    "file": "data/S7.2.csv.gz",
+    "rows": 696,
+    "columns": 4,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "63a19b298116769c2a7eb269e0442e24ad58ec99e09e6a14aa99625da55838b9"
+  },
+  {
+    "section": "S7.3",
+    "file": "data/S7.3.csv.gz",
+    "rows": 144,
+    "columns": 12,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "eafdc1d78d2d2b2f08b8c0ac54fcd60257b9fd3d9389abd9334e14b313b2b732"
+  },
+  {
+    "section": "S7.4",
+    "file": "data/S7.4.csv.gz",
+    "rows": 144,
+    "columns": 13,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "0da51d6608e5ac803fc6b9bf9fb3f982c9c4da0770d56bd16264790022591c07"
+  },
+  {
+    "section": "S8.1",
+    "file": "data/S8.1.csv.gz",
+    "rows": 15,
+    "columns": 16,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "0217d86ec49967cb15f3672dc6a88494b21c8ce16e9cf009ad100932b8283020"
+  },
+  {
+    "section": "S8.2",
+    "file": "data/S8.2.csv.gz",
+    "rows": 18,
+    "columns": 14,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "e2aa1d9204b62d68da6327fd09b2c8a018c4d972d2151435ccc0105748886c3e"
+  },
+  {
+    "section": "S8.3",
+    "file": "data/S8.3.csv.gz",
+    "rows": 3,
+    "columns": 16,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "aebaf09ea0f1fe7647bcf24dab48cd2e821c929fce64bffc1259618fb1aaea0f"
+  },
+  {
+    "section": "S9.3",
+    "file": "data/S9.3.csv.gz",
+    "rows": 8,
+    "columns": 2,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "929b0f69b1b14b478f7de2b02d4203f7511a9b38237fb55d7891f6156374fc43"
+  },
+  {
+    "section": "S9.4",
+    "file": "data/S9.4.csv.gz",
+    "rows": 36,
+    "columns": 43,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "4aa9fbe1718ea70d027ae35400e92003fad51b0dfede50114f28b0d9bf69613e"
+  },
+  {
+    "section": "S10.1",
+    "file": "data/S10.1.csv.gz",
+    "rows": 711,
+    "columns": 11,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "312fbccd4144e9c15cce5071a96a701e177e27502f775a5dbe5c33164c08afbb"
+  },
+  {
+    "section": "S10.2",
+    "file": "data/S10.2.csv.gz",
+    "rows": 6,
+    "columns": 10,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "17794f5d16dc2f97ac7949c681bbaad9a4813e91319d9097f3b751bf6e0fbf56"
+  },
+  {
+    "section": "S11.1",
+    "file": "data/S11.1.csv.gz",
+    "rows": 2844,
+    "columns": 20,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "fb9bec8e32f677bbbd06b1f703df9e192a0d972bbfa83a81bb73bf9d4e6d7876"
+  },
+  {
+    "section": "S11.2",
+    "file": "data/S11.2.csv.gz",
+    "rows": 78,
+    "columns": 13,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "4c39d2eca748ebfdf58b0454bb6b95c7b2e35c34943a59705d7e5910e5db84c2"
+  },
+  {
+    "section": "S11.3",
+    "file": "data/S11.3.csv.gz",
+    "rows": 2133,
+    "columns": 9,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "fdf2a7ac1cf29eb3449b26abd2b521fd2b6441f28cb7f0fed149a72b0ed3dc20"
+  },
+  {
+    "section": "S11.4",
+    "file": "data/S11.4.csv.gz",
+    "rows": 7,
+    "columns": 7,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "918de2abc1b02f490dcf45e6f52fe2000fb2a086c01debc9d2cbda436c61a64c"
+  },
+  {
+    "section": "S11.6",
+    "file": "data/S11.6.csv.gz",
+    "rows": 6,
+    "columns": 20,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "24752656c96a1b512ec043fbd80d29f874abacb7648467ef815a677e3b7df548"
+  },
+  {
+    "section": "S12.2",
+    "file": "data/S12.2.csv.gz",
+    "rows": 1,
+    "columns": 5,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "f5a6327a22b106231169a70f6bba0a63b22165a2dba9f2d2a80d67d0df3db5a3"
+  },
+  {
+    "section": "S12.3",
+    "file": "data/S12.3.csv.gz",
+    "rows": 2,
+    "columns": 15,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "3bc15d2e68000c8b65a6c922d2c480ac77e2b3d708f1f0b1d6cf52ecd3cfd2c0"
+  },
+  {
+    "section": "S12.4",
+    "file": "data/S12.4.csv.gz",
+    "rows": 30,
+    "columns": 5,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "7803fb8f566eac5694492e4f537f2fc1ebc4a075c02bd5398d0a8453d984cbf0"
+  },
+  {
+    "section": "S12.7",
+    "file": "data/S12.7.csv.gz",
+    "rows": 42,
+    "columns": 6,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "2acc0567aa2a737b6686ff4fbf7133d7968daf2e2263a6b7114d41e26975c173"
+  },
+  {
+    "section": "S12.8",
+    "file": "data/S12.8.csv.gz",
+    "rows": 30,
+    "columns": 9,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "02b3192c3bf9de12643d8a0ff21e1c2a0066b0d18192451046c2cf4e0f8c57d3"
+  },
+  {
+    "section": "S12.9",
+    "file": "data/S12.9.csv.gz",
+    "rows": 18,
+    "columns": 10,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "f9c1bde9279d19d736da572ce05e76867c3a4f3f1f257feef6399282b1cba9ee"
+  },
+  {
+    "section": "S12.10",
+    "file": "data/S12.10.csv.gz",
+    "rows": 6,
+    "columns": 5,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "ee071d3653c32b0131adc4f08de6362cf8372c78adcabf49b2b75100a305c12f"
+  },
+  {
+    "section": "S12.11",
+    "file": "data/S12.11.csv.gz",
+    "rows": 4,
+    "columns": 3,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "1fee68c98079e5c084e88b68e791db86d1d75b1de3e781980ba9d0c7cb86b629"
+  },
+  {
+    "section": "S13.1",
+    "file": "data/S13.1.csv.gz",
+    "rows": 6,
+    "columns": 6,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "9067af3e49d399464bf9f75a011fac667051c8ec4582298730858ef95a9c8720"
+  },
+  {
+    "section": "S13.2",
+    "file": "data/S13.2.csv.gz",
+    "rows": 90,
+    "columns": 46,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "fd5cc6b3ddb383303ec8951107787585d2010308604068277c395b24e875a1ad"
+  },
+  {
+    "section": "S13.3",
+    "file": "data/S13.3.csv.gz",
+    "rows": 138,
+    "columns": 8,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "12597a2fdae984a883777311fdb0a3840d1f8f79a7fa4bc4f6bc9f0892d43c3d"
+  },
+  {
+    "section": "S13.4",
+    "file": "data/S13.4.csv.gz",
+    "rows": 9,
+    "columns": 18,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "b6d64dd18858544b48609eaeb1600879a61203015435a705ea7b6fe0a433f72d"
+  },
+  {
+    "section": "S14.1",
+    "file": "data/S14.1.csv.gz",
+    "rows": 18,
+    "columns": 8,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "dbb8f13a37ed395cb35d24b90a74ea30c6f0243df68939a28391e24655edcbf2"
+  },
+  {
+    "section": "S14.3",
+    "file": "data/S14.3.csv.gz",
+    "rows": 6,
+    "columns": 7,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "34635f4e109f9f736e16efe522c18faf904ca92a926e3b7434b5f7c3766ae61a"
+  },
+  {
+    "section": "S14.4",
+    "file": "data/S14.4.csv.gz",
+    "rows": 30,
+    "columns": 9,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "81a65d2de1b6e1fadfb2c607ba68cf8eea4c8ac0de0abd1f56f6356df93ad9e6"
+  },
+  {
+    "section": "S15.3",
+    "file": "data/S15.3.csv.gz",
+    "rows": 12,
+    "columns": 13,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "edb7fdfa4ecd6aad657249dcb3feeed1c605d148128a62b6552e17ea83d713ce"
+  },
+  {
+    "section": "S15.4",
+    "file": "data/S15.4.csv.gz",
+    "rows": 48,
+    "columns": 8,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "aa24600e0b446b38e470bee6b75c8c48afe33b6c618815d8310a94c42daee4f9"
+  },
+  {
+    "section": "S16.1",
+    "file": "data/S16.1.csv.gz",
+    "rows": 6,
+    "columns": 11,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "6c3397dc1716c390889d104ccb6e393b4b79284a2b771c5b79b936f1fc11edc2"
+  },
+  {
+    "section": "S16.3",
+    "file": "data/S16.3.csv.gz",
+    "rows": 6,
+    "columns": 3,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "61bf310f304448256e82a212d1e36b082a2d3a47b2233e1ee6aa86056819e197"
+  },
+  {
+    "section": "S16.4",
+    "file": "data/S16.4.csv.gz",
+    "rows": 6,
+    "columns": 6,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "5c09021a2d59a0f7fcabc017557fbd4b838ddd00fe676418b1b8a398c50379be"
+  },
+  {
+    "section": "S17.1",
+    "file": "data/S17.1.csv.gz",
+    "rows": 160,
+    "columns": 29,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "4f7a71ad4d5bd1afb6ad24e74439317bf607c279d9db83aa630f9b526ec7115c"
+  },
+  {
+    "section": "S17.2",
+    "file": "data/S17.2.csv.gz",
+    "rows": 32,
+    "columns": 6,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "7a9bdce149ff12be058d12593aa90a00397743eab554f95cb096b508199192ae"
+  },
+  {
+    "section": "S17.3",
+    "file": "data/S17.3.csv.gz",
+    "rows": 128,
+    "columns": 13,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "f597c39f163de0a485368b9df19ea863e4525b0b2fef6b71d473180c118b171e"
+  },
+  {
+    "section": "S17.4",
+    "file": "data/S17.4.csv.gz",
+    "rows": 1,
+    "columns": 2,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "043926ed9841aa2c313ab590cd9477f9a6860868987d51d9c6bf79e4506f6b02"
+  },
+  {
+    "section": "S17.5",
+    "file": "data/S17.5.csv.gz",
+    "rows": 1,
+    "columns": 20,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "e835ab3a655b568b341f7766782ab908435205ebfbda86db8d2c23af828f2a5a"
+  },
+  {
+    "section": "S17.6",
+    "file": "data/S17.6.csv.gz",
+    "rows": 5,
+    "columns": 5,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "4bf665cc7408efbfdf61bd6edbc065c47e79612861179f8e5c3d453d1b234e3e"
+  },
+  {
+    "section": "S17.7",
+    "file": "data/S17.7.csv.gz",
+    "rows": 39,
+    "columns": 3,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "c9c0097bbb04b40fb46d4087511006f4ba11ba8ce80a4ea1f8cd5df76eeeef16"
+  },
+  {
+    "section": "S18.1",
+    "file": "data/S18.1.csv.gz",
+    "rows": 144,
+    "columns": 18,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "b2a2970b2398e0018e34b863f1e4ddd1bc17c4bbe207aec74543f6e06a2d7177"
+  },
+  {
+    "section": "S18.2",
+    "file": "data/S18.2.csv.gz",
+    "rows": 720,
+    "columns": 59,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "cef12f4019351818b879d1a9ee3935528062f7de9a2a393e172063f214539ff5"
+  },
+  {
+    "section": "S19.1",
+    "file": "data/S19.1.csv.gz",
+    "rows": 21,
+    "columns": 22,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "656468a22bfe406a8b0ae9df9cab6422bb91ea06f9e48398364a2c9d0814186d"
+  },
+  {
+    "section": "S19.2",
+    "file": "data/S19.2.csv.gz",
+    "rows": 21,
+    "columns": 23,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "b1af5b668b4a2d97a80b7b565e6d273f135987fbd91325a6a1b54056db0db9d9"
+  },
+  {
+    "section": "S19.4",
+    "file": "data/S19.4.csv.gz",
+    "rows": 21,
+    "columns": 26,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "9909809bbe2c811f7e5c4b83a70e712db22ce2e6287721842589ffd819497a4c"
+  },
+  {
+    "section": "S19.5",
+    "file": "data/S19.5.csv.gz",
+    "rows": 4,
+    "columns": 12,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "df35b57a6ccf40c691c576c541fb626d46c77522db24d15061c39a277233f1a2"
+  },
+  {
+    "section": "S19.6",
+    "file": "data/S19.6.csv.gz",
+    "rows": 290,
+    "columns": 6,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "11b3321ef625e4aaa77560b6a751f6189c414d1cd7e5937bb8e4f38fffc76084"
+  },
+  {
+    "section": "S20.1",
+    "file": "data/S20.1.csv.gz",
+    "rows": 2592,
+    "columns": 31,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "d8014bae6d4716aed5686544b187b0e8ccfc2ea03a2801844727fefc0af7d25a"
+  },
+  {
+    "section": "S20.2",
+    "file": "data/S20.2.csv.gz",
+    "rows": 13,
+    "columns": 3,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "4fa00e196c556d699d6530f83e25cf088b3669b8617dbb840692d47743ee6107"
+  },
+  {
+    "section": "S20.3",
+    "file": "data/S20.3.csv.gz",
+    "rows": 9,
+    "columns": 3,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "146a50d813c7badd6398e86b32a8feaa3681174fff02dacaedb3b645c9a291c0"
+  },
+  {
+    "section": "S20.4",
+    "file": "data/S20.4.csv.gz",
+    "rows": 18,
+    "columns": 12,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "b94bd14ea1ad88ffafe280e2d052cded809c651c1f7353a19dc916ea8bf4771b"
+  },
+  {
+    "section": "S20.5",
+    "file": "data/S20.5.csv.gz",
+    "rows": 1296,
+    "columns": 35,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "94af1258968eed6fb708e4e811c82b8655f2a991a3e2de6b45f95b5511d7f774"
+  },
+  {
+    "section": "S20.6",
+    "file": "data/S20.6.csv.gz",
+    "rows": 36,
+    "columns": 14,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "6f3dc2caefccf8bbb8da7288b3df36ae70874f211db510a52ac0099e95ff0ac9"
+  },
+  {
+    "section": "S20.7",
+    "file": "data/S20.7.csv.gz",
+    "rows": 39,
+    "columns": 3,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "86b95d399e67e3e7c6ee847c67e63ba524643dcda859bd6550dcbc1dd24ed071"
+  },
+  {
+    "section": "S20.8",
+    "file": "data/S20.8.csv.gz",
+    "rows": 9,
+    "columns": 9,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "f84ace1f48b901dfc07ca079bf9280a8ae01df58a9443529485559bb87873c50"
+  },
+  {
+    "section": "S20.9",
+    "file": "data/S20.9.csv.gz",
+    "rows": 8,
+    "columns": 7,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "4554cb9487bdfe124aa0a0d5e06de6dd4a6c758428a5ee9a65220e1119f09823"
+  },
+  {
+    "section": "S20.10",
+    "file": "data/S20.10.csv.gz",
+    "rows": 40,
+    "columns": 44,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "59b475574cbabc2c47cbf642f5b58fb7c175c19cdfa9b9c6ddf8e50d56dac49e"
+  },
+  {
+    "section": "S20.11",
+    "file": "data/S20.11.csv.gz",
+    "rows": 32,
+    "columns": 24,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "a6773e2c43c06eb8cdcfb4cae4b18044db5ba134318f7cea677f1517e015c532"
+  },
+  {
+    "section": "S20.15",
+    "file": "data/S20.15.csv.gz",
+    "rows": 133,
+    "columns": 6,
+    "scope": "Complete rows for this summary section; underlying analysis families are unchanged.",
+    "sha256": "31088154310991113798fd634aa054bc61eb8ae4efbe201ae1dd13f663436aed"
+  },
+  {
+    "section": "S21.1",
+    "file": "data/S21.1.csv.gz",
+    "rows": 12,
+    "columns": 17,
+    "scope": "Complete design-geometry benchmark summary.",
+    "sha256": "be4638fddfcd3286fe7d0f2d9900cea91a7b14b99d4272bdf8c62e7479ac1fac"
+  },
+  {
+    "section": "S21.2",
+    "file": "data/S21.2.csv.gz",
+    "rows": 1,
+    "columns": 16,
+    "scope": "Complete design-geometry benchmark summary.",
+    "sha256": "df84e1873d69e866d2f6fe9884446476ab931c9c7a2a25265781d54b9066418d"
+  },
+  {
+    "section": "S21.3",
+    "file": "data/S21.3.csv.gz",
+    "rows": 384,
+    "columns": 19,
+    "scope": "Complete design-geometry benchmark summary.",
+    "sha256": "8ed4645b0d55bdd3b52b7cb375f4c8fda72fdf212b812f859787279742c533e5"
+  },
+  {
+    "section": "S21.4",
+    "file": "data/S21.4.csv.gz",
+    "rows": 480,
+    "columns": 19,
+    "scope": "Complete design-geometry benchmark summary.",
+    "sha256": "bb5052f53ab63d074008311463a2ad23c6d4d442ff187478d9a592ded4f97336"
+  },
+  {
+    "section": "S21.5",
+    "file": "data/S21.5.csv.gz",
+    "rows": 168,
+    "columns": 9,
+    "scope": "Complete design-geometry benchmark summary.",
+    "sha256": "eb36ac22e04d9ca4cb9113bf2e017aaf799b77abf9a828c0db4fac5522f557aa"
+  },
+  {
+    "section": "S21.6",
+    "file": "data/S21.6.csv.gz",
+    "rows": 216,
+    "columns": 9,
+    "scope": "Complete design-geometry benchmark summary.",
+    "sha256": "1e85519b5c1e44642550c0522b9c7ff7ca79f95edd7db2a866fc0c4abb4960e1"
+  },
+  {
+    "section": "S21.7",
+    "file": "data/S21.7.csv.gz",
+    "rows": 32,
+    "columns": 23,
+    "scope": "Complete design-geometry benchmark summary.",
+    "sha256": "206efc09963b50789eb0e81411ca74659c1fdb373ec8a79fe0918b32c487234d"
+  },
+  {
+    "section": "S21.8",
+    "file": "data/S21.8.csv.gz",
+    "rows": 384,
+    "columns": 7,
+    "scope": "Complete design-geometry benchmark summary.",
+    "sha256": "2b4588bb2c68dac274e662b9876b20290066e4e319f9f998050a8a830cab5a8d"
+  },
+  {
+    "section": "S22.1",
+    "file": "data/S22.1.csv.gz",
+    "rows": 96,
+    "columns": 20,
+    "scope": "All 24 count-grid scenarios, two weight policies and two tests; 1,000 datasets per scenario.",
+    "sha256": "ed899c6eae86cd02f168c900b5557888eb77113ebacc094dce74a3100b6351f8"
+  },
+  {
+    "section": "S23.1",
+    "file": "data/S23.1.csv.gz",
+    "rows": 72,
+    "columns": 23,
+    "scope": "All six targeted scenarios, six arms and two tests; 500 datasets per scenario.",
+    "sha256": "a831fd8ee65d798bead9bad2d2752a8e827cefd22ceb860d8fa499a5ec249996"
+  },
+  {
+    "section": "S23.2",
+    "file": "data/S23.2.csv.gz",
+    "rows": 72,
+    "columns": 15,
+    "scope": "All arm-test marginal tail summaries at 0.05/3000; rates use available tests.",
+    "sha256": "955868df7b7885bd7b96df366041b782a6fd69a92ab557de4c7ec00a249ea9df"
+  },
+  {
+    "section": "S23.3",
+    "file": "data/S23.3.csv.gz",
+    "rows": 12,
+    "columns": 10,
+    "scope": "Independent shared and independent separate weights versus same-count shared weights, in all six scenarios; paired HC3 planned-family FDR differences.",
+    "sha256": "19a3029cbf96124cb022694da1297406f13452532a352dcb66a61ebccc3aa660"
+  },
+  {
+    "section": "S23.4",
+    "file": "data/S23.4.csv.gz",
+    "rows": 3,
+    "columns": 4,
+    "scope": "Expression-stratum totals over six scenarios for same-count separate-weight HC3; descriptive event rates, not FDR.",
+    "sha256": "94a63aa12560c27dfbbe6ed53cf6c7ca091ef255c91ace9ce6920d2e2d320c5c"
+  },
+  {
+    "section": "S23.5",
+    "file": "data/S23.5.csv.gz",
+    "rows": 6,
+    "columns": 8,
+    "scope": "All six fixed Gaussian designs; moment-equivalent variance degrees of freedom, not corrected test degrees of freedom.",
+    "sha256": "b5de22d4b9aabaf3e037de5262dbbf010ae094c46e3d0652d7cbd4ccc36cd653"
+  }
+]

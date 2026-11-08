@@ -1,0 +1,58 @@
+{
+  "scenarios": [
+    {
+      "id": "s01",
+      "index": 1,
+      "n": 40,
+      "rho": 0.3,
+      "depth": "equal",
+      "exposure_fraction": 0,
+      "design_seed": 40040
+    },
+    {
+      "id": "s09",
+      "index": 9,
+      "n": 80,
+      "rho": 0.3,
+      "depth": "equal",
+      "exposure_fraction": 0,
+      "design_seed": 40080
+    },
+    {
+      "id": "s11",
+      "index": 11,
+      "n": 80,
+      "rho": 0.3,
+      "depth": "iid_lognormal",
+      "exposure_fraction": 0,
+      "design_seed": 40080
+    },
+    {
+      "id": "s12",
+      "index": 12,
+      "n": 80,
+      "rho": 0.3,
+      "depth": "iid_lognormal",
+      "exposure_fraction": 0.2,
+      "design_seed": 40080
+    },
+    {
+      "id": "s15",
+      "index": 15,
+      "n": 80,
+      "rho": 0.7,
+      "depth": "iid_lognormal",
+      "exposure_fraction": 0,
+      "design_seed": 40080
+    },
+    {
+      "id": "s23",
+      "index": 23,
+      "n": 160,
+      "rho": 0.7,
+      "depth": "iid_lognormal",
+      "exposure_fraction": 0,
+      "design_seed": 40160
+    }
+  ]
+}

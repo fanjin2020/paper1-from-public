@@ -27,3 +27,4 @@ __pycache__/
 .env.*
 .DS_Store
 Thumbs.db
+/publication_figures/output/
